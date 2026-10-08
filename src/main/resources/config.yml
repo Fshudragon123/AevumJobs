@@ -60,6 +60,9 @@ cash-rewards:
   49: 15000
   50: 30000
 
+leaderboards:
+  cache-seconds: 60
+
 anti-abuse:
   builder:
     placement-cooldown-ms: 30000
