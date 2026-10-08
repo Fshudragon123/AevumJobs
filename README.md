@@ -1,0 +1,1 @@
+# AevumJobs\n\nFlagship AevumMC professions and progression plugin. Full documentation is committed with the implementation.\n
