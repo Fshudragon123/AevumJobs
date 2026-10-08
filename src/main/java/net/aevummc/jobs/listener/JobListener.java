@@ -34,7 +34,7 @@ public final class JobListener implements Listener {
 
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true) public void onPlace(BlockPlaceEvent e){
         Player p=e.getPlayer();String k=key(e.getBlock().getLocation());long now=System.currentTimeMillis();long cooldown=config.config().getLong("anti-abuse.builder.placement-cooldown-ms",30000);
-        Long old=playerPlacedBlocks.put(k,now);if(old!=null&&now-old<cooldown)return;Material m=e.getBlock().getType();
+        Long old=playerPlacedBlocks.put(k,now);if(old!=null&&now-old<cooldown)return;\n        if(playerPlacedBlocks.size()>100000) playerPlacedBlocks.entrySet().removeIf(entry->now-entry.getValue()>Math.max(cooldown,30000L));\n        Material m=e.getBlock().getType();
         if(isFarmerPlant(m))jobs.addXp(p,JobType.FARMER,config.xp(JobType.FARMER,"plant",m.name()));
         else if(isLumberSapling(m))jobs.addXp(p,JobType.LUMBERJACK,config.xp(JobType.LUMBERJACK,"saplings",m.name()));
         else jobs.addXp(p,JobType.BUILDER,config.xp(JobType.BUILDER,"place",null));
