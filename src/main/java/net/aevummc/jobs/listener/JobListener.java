@@ -13,8 +13,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.block.*;
-import org.bukkit.event.brewing.BrewEvent;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 
@@ -49,9 +50,9 @@ public final class JobListener implements Listener {
     }
     private boolean isAgeableCrop(BlockBreakEvent e){return e.getBlock().getBlockData() instanceof Ageable a&&a.getAge()==a.getMaximumAge();}
     @EventHandler(ignoreCancelled=true) public void onFish(PlayerFishEvent e){if(e.getState()==PlayerFishEvent.State.CAUGHT_FISH)jobs.addXp(e.getPlayer(),JobType.FISHERMAN,config.xp(JobType.FISHERMAN,"catch",null));}
-    @EventHandler(ignoreCancelled=true) public void onBreed(BreedEvent e){if(!(e.getBreeder() instanceof Player p))return;long now=System.currentTimeMillis();long cd=config.config().getLong("anti-abuse.rancher.breeding-cooldown-ms",5000);Long last=breederCooldown.put(p.getUniqueId(),now);if(last==null||now-last>=cd)jobs.addXp(p,JobType.RANCHER,config.xp(JobType.RANCHER,"breed",null));}
+    @EventHandler(ignoreCancelled=true) public void onBreed(EntityBreedEvent e){if(!(e.getBreeder() instanceof Player p))return;long now=System.currentTimeMillis();long cd=config.config().getLong("anti-abuse.rancher.breeding-cooldown-ms",5000);Long last=breederCooldown.put(p.getUniqueId(),now);if(last==null||now-last>=cd)jobs.addXp(p,JobType.RANCHER,config.xp(JobType.RANCHER,"breed",null));}
     @EventHandler(ignoreCancelled=true) public void onDeath(EntityDeathEvent e){
-        Entity dead=e.getEntity();if(!processedDeaths.add(dead.getUniqueId()))return;Player killer=dead.getKiller();if(killer==null)return;
+        org.bukkit.entity.LivingEntity dead=e.getEntity();if(!processedDeaths.add(dead.getUniqueId()))return;Player killer=dead.getKiller();if(killer==null)return;
         if(dead instanceof Player victim){double mult=jobs.warriorMultiplier(killer.getUniqueId(),victim.getUniqueId());if(mult>0)jobs.addXp(killer,JobType.WARRIOR,config.xp(JobType.WARRIOR,"kill",null)*mult);}
         else if(validHunter(dead))jobs.addXp(killer,JobType.HUNTER,config.xp(JobType.HUNTER,"kill",null));
         plugin.getServer().getScheduler().runTaskLater(plugin,()->processedDeaths.remove(dead.getUniqueId()),1L);
