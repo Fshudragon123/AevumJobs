@@ -1,0 +1,31 @@
+name: AevumJobs
+version: 1.0.0
+main: net.aevummc.jobs.AevumJobs
+api-version: '26.2'
+author: AevumMC
+website: https://github.com/Fshudragon123/AevumJobs
+description: Premium AevumMC profession progression system.
+softdepend:
+  - Vault
+  - PlaceholderAPI
+  - Towny
+commands:
+  jobs:
+    description: Open the AevumJobs system.
+    usage: /jobs [menu|stats|leaderboard|info|level|rewards|help|admin]
+    aliases: [job, professions]
+permissions:
+  aevumjobs.use:
+    default: true
+  aevumjobs.admin:
+    default: op
+  aevumjobs.admin.setlevel:
+    default: op
+  aevumjobs.admin.addxp:
+    default: op
+  aevumjobs.admin.removexp:
+    default: op
+  aevumjobs.admin.reset:
+    default: op
+  aevumjobs.admin.reload:
+    default: op
