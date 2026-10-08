@@ -1,0 +1,247 @@
+# AevumJobs — flagship AevumMC profession system
+professions:
+  active-limit: 3
+  preserve-progression-on-leave: true
+
+xp-curve:
+  base: 500
+  growth: 250
+  exponent: 1.18
+
+cash-rewards:
+  1: 150
+  2: 200
+  3: 250
+  4: 300
+  5: 400
+  6: 450
+  7: 500
+  8: 550
+  9: 600
+  10: 750
+  11: 800
+  12: 850
+  13: 900
+  14: 950
+  15: 1100
+  16: 1150
+  17: 1200
+  18: 1300
+  19: 1400
+  20: 1500
+  21: 1600
+  22: 1700
+  23: 1800
+  24: 1900
+  25: 2000
+  26: 2100
+  27: 2250
+  28: 2400
+  29: 2550
+  30: 2750
+  31: 2900
+  32: 3050
+  33: 3200
+  34: 3350
+  35: 3500
+  36: 3700
+  37: 3900
+  38: 4100
+  39: 4300
+  40: 4500
+  41: 4750
+  42: 5000
+  43: 5250
+  44: 6500
+  45: 7750
+  46: 8000
+  47: 9500
+  48: 10000
+  49: 15000
+  50: 30000
+
+anti-abuse:
+  builder:
+    placement-cooldown-ms: 30000
+  rancher:
+    breeding-cooldown-ms: 5000
+  pvp:
+    cooldown-seconds: 120
+    max-xp-from-same-victim: 1
+    repeated-kill-xp-multiplier: 0.0
+  hunter:
+    invalid-entities: [ARMOR_STAND, ITEM_DISPLAY, BLOCK_DISPLAY, TEXT_DISPLAY]
+
+level-up-effects:
+  particles: true
+
+jobs:
+  miner:
+    actions:
+      blocks:
+        default-xp: 5
+        values:
+          STONE: 5
+          COBBLESTONE: 5
+          DEEPSLATE: 5
+          COAL_ORE: 5
+          COPPER_ORE: 5
+          IRON_ORE: 5
+          GOLD_ORE: 5
+          DIAMOND_ORE: 5
+          EMERALD_ORE: 5
+          REDSTONE_ORE: 5
+          LAPIS_ORE: 5
+          NETHER_QUARTZ_ORE: 5
+          NETHER_GOLD_ORE: 5
+  farmer:
+    actions:
+      harvest:
+        default-xp: 4
+        values:
+          WHEAT: 4
+          CARROTS: 4
+          POTATOES: 4
+          BEETROOTS: 4
+          MELON: 4
+          PUMPKIN: 4
+          SUGAR_CANE: 4
+          COCOA: 4
+          NETHER_WART: 4
+      plant:
+        default-xp: 2
+        values:
+          WHEAT: 2
+          CARROTS: 2
+          POTATOES: 2
+          BEETROOTS: 2
+          SUGAR_CANE: 2
+          COCOA: 2
+          NETHER_WART: 2
+  lumberjack:
+    actions:
+      blocks:
+        default-xp: 6
+        values:
+          OAK_LOG: 6
+          SPRUCE_LOG: 6
+          BIRCH_LOG: 6
+          JUNGLE_LOG: 6
+          ACACIA_LOG: 6
+          DARK_OAK_LOG: 6
+          MANGROVE_LOG: 6
+          CHERRY_LOG: 6
+          CRIMSON_STEM: 6
+          WARPED_STEM: 6
+      saplings:
+        default-xp: 2
+        values:
+          OAK_SAPLING: 2
+          SPRUCE_SAPLING: 2
+          BIRCH_SAPLING: 2
+          JUNGLE_SAPLING: 2
+          ACACIA_SAPLING: 2
+          DARK_OAK_SAPLING: 2
+          MANGROVE_PROPAGULE: 2
+          CHERRY_SAPLING: 2
+  fisherman:
+    actions:
+      catch: {default-xp: 10}
+  rancher:
+    actions:
+      breed: {default-xp: 12}
+  warrior:
+    actions:
+      kill: {default-xp: 100}
+  hunter:
+    actions:
+      kill: {default-xp: 5}
+  builder:
+    actions:
+      place: {default-xp: 2}
+  alchemist:
+    actions:
+      brew: {default-xp: 25}
+  enchanter:
+    actions:
+      enchant: {default-xp: 30}
+  blacksmith:
+    actions:
+      craft: {default-xp: 6}
+      repair: {default-xp: 15}
+      smith: {default-xp: 20}
+  scholar:
+    actions:
+      book: {default-xp: 15}
+      map: {default-xp: 10}
+
+master-rewards:
+  miner:
+    material: DIAMOND_PICKAXE
+    name: "⛏ Master Miner's Pickaxe"
+    enchants: [EFFICIENCY:5, FORTUNE:3, UNBREAKING:3]
+  farmer:
+    material: DIAMOND_HOE
+    name: "🌾 Master Farmer's Hoe"
+    enchants: [EFFICIENCY:5, UNBREAKING:3]
+  lumberjack:
+    material: DIAMOND_AXE
+    name: "🪓 Master Lumberjack's Axe"
+    enchants: [EFFICIENCY:5, UNBREAKING:3]
+  fisherman:
+    material: FISHING_ROD
+    name: "🎣 Master Fisherman's Rod"
+    enchants: [LUCK_OF_THE_SEA:3, LURE:3, UNBREAKING:3]
+  rancher:
+    material: DIAMOND_AXE
+    name: "🐄 Master Rancher's Axe"
+    enchants: [EFFICIENCY:5, UNBREAKING:3]
+  warrior:
+    material: DIAMOND_SWORD
+    name: "⚔ Master Warrior's Sword"
+    enchants: [SHARPNESS:5, UNBREAKING:3]
+  hunter:
+    material: BOW
+    name: "🏹 Master Hunter's Bow"
+    enchants: [POWER:5, PUNCH:2, UNBREAKING:3]
+  builder:
+    material: DIAMOND_PICKAXE
+    name: "🧱 Master Builder's Pickaxe"
+    enchants: [EFFICIENCY:5, UNBREAKING:3]
+  alchemist:
+    material: POTION
+    name: "🧪 Master Alchemist's Bundle"
+    bundle: true
+    potions: [FIRE_RESISTANCE, STRENGTH, REGENERATION]
+    enchants: []
+  enchanter:
+    material: ENCHANTED_BOOK
+    name: "✨ Master Enchanter's Book"
+    stored-enchant: MENDING
+    stored-level: 1
+    enchants: []
+  blacksmith:
+    material: DIAMOND_CHESTPLATE
+    name: "💎 Master Blacksmith's Equipment"
+    enchants: [PROTECTION:4, UNBREAKING:3]
+  scholar:
+    material: ENCHANTED_BOOK
+    name: "📚 Master Scholar's Book"
+    stored-enchant: MENDING
+    stored-level: 1
+    enchants: []
+
+gui:
+  main-title: "🏛 A E V U M  •  J O B S"
+  progress-title: "✦ Profession Progression"
+  selection-title: "Choose Your Profession"
+  manage-title: "Manage Your Professions"
+  rewards-title: "Profession Rewards"
+  stats-title: "AevumJobs Statistics"
+  leaderboard-title: "AevumJobs Leaderboards"
+
+messages:
+  joined: "&6&lAevumJobs &7» &a✓ Profession activated: &f{job}&a."
+  left: "&6&lAevumJobs &7» &eProfession left: &f{job}&e. Your progression is preserved."
+  limit: "&6&lAevumJobs &7» &cYou already have the maximum of &f{limit}&c active professions."
+  already: "&6&lAevumJobs &7» &eYou are already a member of &f{job}&e."
