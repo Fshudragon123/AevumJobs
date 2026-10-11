@@ -13,14 +13,20 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
 
 public final class GuiManager {
     public enum Menu { MAIN, SELECT, MANAGE, CONFIRM, PROGRESSION, REWARDS, STATS, LEADERBOARD }
-    public static final int[] JOB_SLOTS = {10,12,14,16,19,21,23,25,28,30,32,34};
+    public static final int[] JOB_SLOTS = {10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34};
 
     private final AevumJobs plugin;
     private final ConfigManager config;
@@ -28,174 +34,469 @@ public final class GuiManager {
     private final RewardService rewards;
 
     public GuiManager(AevumJobs plugin, ConfigManager config, JobService jobs, RewardService rewards) {
-        this.plugin = plugin; this.config = config; this.jobs = jobs; this.rewards = rewards;
+        this.plugin = plugin;
+        this.config = config;
+        this.jobs = jobs;
+        this.rewards = rewards;
     }
 
+    /** Main hub: profession gallery, player overview and consistent utility footer. */
     public void openMain(Player p, PlayerJobs d) {
-        Inventory inv = Bukkit.createInventory(new Holder(Menu.MAIN,null,null),54, title("gui.main-title","🏛 A E V U M • J O B S"));
-        decorate(inv); addJobCards(inv,d); addActive(inv,d);
-        inv.setItem(49,item(Material.BOOK,"§6§lYour Statistics",List.of("§7Every profession. Total XP. Total earned.","§eClick to view.")));
-        inv.setItem(50,item(Material.LECTERN,"§6§lManage Professions",List.of("§7Change your active professions.","§eClick to manage.")));
-        inv.setItem(52,item(Material.GOLD_INGOT,"§6§lLeaderboards",List.of("§7Top specialists across Aevum.","§eClick to view.")));
-        inv.setItem(53,item(Material.BARRIER,"§cClose",List.of()));
+        Inventory inv = Bukkit.createInventory(new Holder(Menu.MAIN, null, null),
+                54, title("gui.main-title", "§8⚜ §6Aevum Imperium §8• §fJobs"));
+        decorate(inv);
+        inv.setItem(4, playerHead(p, "§6§l" + p.getName(),
+                List.of("§7THE IMPERIAL REGISTER", GuiTheme.divider(),
+                        "§7Active professions: §f" + d.activeCount() + "§7 / §f" + config.activeLimit(),
+                        "§7Combined job levels: §e" + combinedLevels(d),
+                        "§7Lifetime earnings: §a" + money(totalEarned(d)),
+                        "", "§eYour record across Aevum.")));
+        addJobCards(inv, d);
+        addActive(inv, d);
+        inv.setItem(48, item(Material.WRITABLE_BOOK, "§e§lHelp & Commands",
+                List.of("§7A quick guide to the job system.", "", "§eClick to view available commands.")));
+        inv.setItem(49, item(Material.KNOWLEDGE_BOOK, "§6§lPersonal Records",
+                List.of("§7Your XP, earnings and profession levels.", "", "§eClick to inspect your record.")));
+        inv.setItem(50, item(Material.LECTERN, "§6§lMy Professions",
+                List.of("§7Manage your active employment.", "§7Leave a profession or browse others.", "", "§eClick to manage.")));
+        inv.setItem(52, item(Material.GOLD_INGOT, "§6§lImperial Rankings",
+                List.of("§7The leading specialists of Aevum.", "", "§eClick to view the rankings.")));
+        inv.setItem(53, item(Material.BARRIER, "§c§lClose",
+                List.of("§7Close the jobs interface.")));
         p.openInventory(inv);
     }
 
     public void openSelection(Player p, PlayerJobs d) {
-        Inventory inv = Bukkit.createInventory(new Holder(Menu.SELECT,null,null),54,title("gui.selection-title","Choose Your Profession"));
-        decorate(inv); addJobCards(inv,d);
-        inv.setItem(45,item(Material.IRON_INGOT,"§6§lActive Slots",List.of("§7Used: §f"+d.activeCount()+"§7 / §f"+config.activeLimit())));
-        inv.setItem(49,item(Material.ARROW,"§eBack",List.of())); inv.setItem(53,item(Material.BARRIER,"§cClose",List.of()));
+        Inventory inv = Bukkit.createInventory(new Holder(Menu.SELECT, null, null), 54,
+                title("gui.selection-title", "§8⚜ §6Choose a Profession"));
+        decorate(inv);
+        inv.setItem(4, item(Material.COMPASS, "§6§lChoose Your Path",
+                List.of("§7Every craft contributes to the realm.", "§7Select a profession to inspect or join.", "",
+                        "§7Active slots: §e" + d.activeCount() + "§8/§e" + config.activeLimit())));
+        addJobCards(inv, d);
+        inv.setItem(45, item(Material.IRON_INGOT, "§6§lEmployment Capacity",
+                List.of("§7Occupied slots: §f" + d.activeCount(),
+                        "§7Available slots: §f" + Math.max(0, config.activeLimit() - d.activeCount()),
+                        "§7Maximum: §f" + config.activeLimit())));
+        inv.setItem(49, item(Material.ARROW, "§e§lBack to the Hub",
+                List.of("§7Return to the main jobs screen.")));
+        inv.setItem(53, item(Material.BARRIER, "§c§lClose", List.of("§7Close the jobs interface.")));
         p.openInventory(inv);
     }
 
     public void openManage(Player p, PlayerJobs d) {
-        Inventory inv = Bukkit.createInventory(new Holder(Menu.MANAGE,null,null),54,title("gui.manage-title","Manage Your Professions"));
-        decorate(inv); int slot=20;
-        for(JobType j:d.active()) {
-            JobData jd=d.get(j);
-            inv.setItem(slot++,item(j.getMaterial(),"§6§l"+j.getIcon()+" "+j.getDisplayName(),
-                    List.of("§7Level: §f"+jd.level(),"§7XP: §f"+Math.round(jd.xp()),"","§eLeft click §7to view","§cRight click §7to leave")));
+        Inventory inv = Bukkit.createInventory(new Holder(Menu.MANAGE, null, null), 54,
+                title("gui.manage-title", "§8⚜ §6My Professions"));
+        decorate(inv);
+        inv.setItem(4, playerHead(p, "§6§lEmployment Register",
+                List.of("§7Your currently active professions.", GuiTheme.divider(),
+                        "§7Slots used: §e" + d.activeCount() + "§8/§e" + config.activeLimit(),
+                        "§7Progress is preserved when leaving.")));
+
+        int[] slots = {20, 21, 22};
+        int i = 0;
+        for (JobType j : d.active()) {
+            if (i >= slots.length) break;
+            JobData jd = d.get(j);
+            inv.setItem(slots[i++], item(j.getMaterial(), "§6§l" + j.getDisplayName(),
+                    List.of("§7" + j.getDescription(), "", "§7Status: §aACTIVE",
+                            "§7Level: §e" + jd.level() + " §8/ §f50",
+                            "§7XP: §f" + number(Math.round(jd.xp())) + " §8/ §f" + reqText(jd.level()),
+                            GuiTheme.progressBar(progress(jd), 10) + " §e" + progressPct(jd),
+                            "", "§eLeft-click §7to view this profession.",
+                            "§cRight-click §7to leave safely.")));
         }
-        inv.setItem(49,item(Material.ARROW,"§eBack",List.of())); inv.setItem(53,item(Material.BARRIER,"§cClose",List.of())); p.openInventory(inv);
+        if (d.active().isEmpty()) {
+            inv.setItem(22, item(Material.BOOK, "§e§lYour story starts here",
+                    List.of("§7You have no active professions yet.", "§7Progress is saved as you play.", "",
+                            "§eClick here or browse professions to begin.")));
+        } else if (i < slots.length) {
+            for (int n = i; n < slots.length; n++) {
+                inv.setItem(slots[n], item(Material.GRAY_STAINED_GLASS_PANE, "§8§lAvailable Slot",
+                        List.of("§7You can activate another profession.", "", "§eClick to browse professions.")));
+            }
+        }
+
+        inv.setItem(48, item(Material.COMPASS, "§e§lBrowse Professions",
+                List.of("§7Explore the full profession gallery.", "", "§eClick to browse.")));
+        inv.setItem(49, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to the main jobs screen.")));
+        inv.setItem(53, item(Material.BARRIER, "§c§lClose", List.of("§7Close the jobs interface.")));
+        p.openInventory(inv);
     }
 
     public void openConfirm(Player p, PlayerJobs d, JobType j) {
-        JobData jd=d.get(j);
-        Inventory inv=Bukkit.createInventory(new Holder(Menu.CONFIRM,j,null),27,"§8Leave "+j.getDisplayName()+"?");
+        if (j == null || !d.isActive(j)) {
+            openManage(p, d);
+            return;
+        }
+        JobData jd = d.get(j);
+        Inventory inv = Bukkit.createInventory(new Holder(Menu.CONFIRM, j, null), 27,
+                "§8Leave §c" + j.getDisplayName() + "§8?");
         decorate(inv);
-        inv.setItem(11,item(j.getMaterial(),"§c§lLEAVE "+j.getDisplayName(),List.of("§7Your progression will be preserved.","","§7Level: §f"+jd.level(),"§7XP: §f"+Math.round(jd.xp()),"§7Total earned: §f$"+String.format("%,.0f",jd.totalEarned()))));
-        inv.setItem(13,item(Material.RED_CONCRETE,"§c§l✕ CANCEL",List.of()));
-        inv.setItem(15,item(Material.LIME_CONCRETE,"§a§l✓ CONFIRM",List.of()));
+        inv.setItem(4, item(j.getMaterial(), "§c§lLeave " + j.getDisplayName(),
+                List.of("§7You are about to leave this profession.", "", "§7Your progression will be preserved.",
+                        "§7Level: §e" + jd.level(), "§7XP: §f" + number(Math.round(jd.xp())),
+                        "§7Lifetime earnings: §a" + money(jd.totalEarned()))));
+        inv.setItem(11, item(Material.RED_CONCRETE, "§c§lConfirm Departure",
+                List.of("§7Remove this profession from your active slots.", "§7Your saved levels and earnings remain.", "",
+                        "§cThis action changes active employment only.")));
+        inv.setItem(13, item(Material.GRAY_CONCRETE, "§7§lKeep Profession",
+                List.of("§7Return without making changes.")));
+        inv.setItem(15, item(Material.LIME_CONCRETE, "§a§lLeave Profession",
+                List.of("§7Confirm leaving " + j.getDisplayName() + ".", "", "§eClick to confirm.")));
         p.openInventory(inv);
     }
 
     public void openProgression(Player p, PlayerJobs d, JobType j) {
-        JobData jd=d.get(j);
-        Inventory inv=Bukkit.createInventory(new Holder(Menu.PROGRESSION,j,null),54,title("gui.progress-title","✦ Profession Progression"));
+        if (j == null) return;
+        JobData jd = d.get(j);
+        Inventory inv = Bukkit.createInventory(new Holder(Menu.PROGRESSION, j, null), 54,
+                title("gui.progress-title", "§8⚜ §6Profession Dossier"));
         decorate(inv);
-        inv.setItem(4,item(j.getMaterial(),"§6§l"+j.getIcon()+" "+j.getDisplayName(),
-                List.of("§7"+j.getDescription(),"","§fLevel §6§l"+jd.level(),"§7XP §f"+Math.round(jd.xp())+" / "+reqText(jd.level()))));
-        int[] ms={10,19,28,37,46,52}; int[] levels={1,10,20,30,40,50};
-        for(int i=0;i<levels.length;i++){
-            int level=levels[i]; String state=jd.level()>level?"§a✓ Completed":jd.level()==level?"§6★ Current":"§8🔒 Locked";
-            inv.setItem(ms[i],item(level<=jd.level()?Material.GOLD_BLOCK:Material.IRON_BLOCK,"§6§lLEVEL "+level,
-                    List.of(state,"§7Cash: §f"+money(config.cashReward(level)),level==50?"§7Master Reward: §e"+masterName(j):"§7Progress milestone")));
+
+        inv.setItem(4, item(j.getMaterial(), "§6§l" + j.getDisplayName(),
+                List.of("§7" + j.getDescription(), GuiTheme.divider(),
+                        "§7Status: " + (d.isActive(j) ? "§aACTIVE" : "§8INACTIVE"),
+                        "§7Lifetime earnings: §a" + money(jd.totalEarned()),
+                        "§7Actions completed: §f" + number(jd.actions()))));
+
+        int[] milestoneSlots = {11, 15, 20, 24, 29, 33};
+        int[] levels = {1, 10, 20, 30, 40, 50};
+        for (int i = 0; i < levels.length; i++) {
+            int level = levels[i];
+            boolean completed = jd.level() > level || (level == 50 && jd.level() == 50);
+            boolean current = jd.level() == level && level != 50;
+            String status = completed ? "§a✓ MILESTONE REACHED" : current ? "§e★ CURRENT LEVEL" : "§8🔒 FUTURE MILESTONE";
+            Material icon = completed ? Material.GOLD_BLOCK : current ? Material.GOLD_INGOT : Material.IRON_BLOCK;
+            List<String> lore = new ArrayList<>();
+            lore.add(status);
+            lore.add(GuiTheme.divider());
+            lore.add("§7Level reward: §a" + money(config.cashReward(level)));
+            if (level == 50) lore.add("§7Masterwork: §e" + masterName(j));
+            else lore.add("§7Milestone level: §f" + level);
+            lore.add("");
+            lore.add(completed ? "§aYour record has passed this level." : "§7Continue earning XP to reach it.");
+            inv.setItem(milestoneSlots[i], item(icon, "§6§lLevel " + level, lore));
         }
-        inv.setItem(31,item(Material.EXPERIENCE_BOTTLE,"§6§lPROGRESS",List.of(progressBar(jd),"§7Total XP: §f"+jd.totalXp(),"§7Actions: §f"+jd.actions())));
-        inv.setItem(41,item(Material.CHEST,"§6§lVIEW ALL REWARDS",List.of("§7See all 50 level rewards.","§eClick to view")));
-        if(d.isActive(j)){
-            inv.setItem(43,item(Material.RED_CONCRETE,"§c§lLEAVE PROFESSION",List.of("§7Progression will be preserved.","§eClick to manage")));
-        }else{
-            String slotText=d.activeCount()>=config.activeLimit()?"§c"+config.activeLimit()+"/"+config.activeLimit()+" PROFESSIONS ACTIVE":"§7Activate this profession";
-            inv.setItem(43,item(Material.LIME_CONCRETE,"§a§lJOIN PROFESSION",List.of(slotText,"§eClick to join")));
+
+        double ratio = progress(jd);
+        inv.setItem(31, item(jd.level() >= 50 ? Material.NETHER_STAR : Material.EXPERIENCE_BOTTLE,
+                jd.level() >= 50 ? "§6§lPROFESSION MASTERED" : "§6§lPROGRESSION",
+                List.of("§7Current level: §e" + jd.level() + " §8/ §f50",
+                        "§7Current XP: §f" + number(Math.round(jd.xp())),
+                        "§7Next level: §f" + reqText(jd.level()),
+                        GuiTheme.progressBar(ratio, 18) + " §e" + progressPct(jd),
+                        "", "§7Total XP earned: §f" + number(jd.totalXp()),
+                        "§7Actions completed: §f" + number(jd.actions()),
+                        "§7Lifetime earnings: §a" + money(jd.totalEarned()))));
+
+        inv.setItem(41, item(Material.CHEST, "§6§lReward Chronicle",
+                List.of("§7Review all 50 level rewards.", "§7See what awaits further progress.", "",
+                        "§eClick to open rewards.")));
+        if (d.isActive(j)) {
+            inv.setItem(43, item(Material.RED_CONCRETE, "§c§lLeave Profession",
+                    List.of("§7Leave this active profession.", "§7Your progression is preserved.", "",
+                            "§eClick to review departure.")));
+        } else {
+            boolean full = d.activeCount() >= config.activeLimit();
+            inv.setItem(43, item(full ? Material.BARRIER : Material.LIME_CONCRETE,
+                    full ? "§c§lEmployment Full" : "§a§lJoin Profession",
+                    List.of(full ? "§cNo active slots remain." : "§7Add " + j.getDisplayName() + " to your active professions.",
+                            "§7Slots used: §e" + d.activeCount() + "§8/§e" + config.activeLimit(),
+                            "", full ? "§7Leave a profession before joining." : "§eClick to activate.")));
         }
-        inv.setItem(49,item(Material.ARROW,"§eBack",List.of())); inv.setItem(53,item(Material.BARRIER,"§cClose",List.of())); p.openInventory(inv);
+        inv.setItem(49, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to the main jobs screen.")));
+        inv.setItem(53, item(Material.BARRIER, "§c§lClose", List.of("§7Close the jobs interface.")));
+        p.openInventory(inv);
     }
 
-    public void openRewards(Player p, PlayerJobs d, JobType j){openRewards(p,d,j,0);}
+    public void openRewards(Player p, PlayerJobs d, JobType j) {
+        openRewards(p, d, j, 0);
+    }
+
     public void openRewards(Player p, PlayerJobs d, JobType j, int page) {
-        Inventory inv=Bukkit.createInventory(new Holder(Menu.REWARDS,j,null,page),54,title("gui.rewards-title","Profession Rewards"));
+        if (j == null) return;
+        int safePage = Math.max(0, Math.min(1, page));
+        JobData jd = d.get(j);
+        int start = safePage * 45 + 1;
+        int end = Math.min(50, start + 44);
+        String menuTitle = title("gui.rewards-title", "§8⚜ §6Reward Chronicle");
+        Inventory inv = Bukkit.createInventory(new Holder(Menu.REWARDS, j, null, safePage), 54,
+                menuTitle + " §8• §f" + (safePage + 1) + "/2");
         decorate(inv);
-        int start=page*45+1,end=Math.min(50,start+44);
-        for(int level=start;level<=end;level++){
-            String state=d.get(j).level()>level?"§a✓ Completed":d.get(j).level()==level?"§6★ Current":"§8🔒 Locked";
-            String extra=level==50?"§e+ Master Reward":"§7Money only";
-            inv.setItem(level-start,item(level==50?Material.NETHER_STAR:Material.GOLD_NUGGET,"§6§lLEVEL "+level,
-                    List.of("§7Cash: §f"+money(config.cashReward(level)),extra,state)));
+
+        for (int level = start; level <= end; level++) {
+            int slot = safePage == 0 ? level - start : 20 + (level - start);
+            boolean completed = jd.level() > level || (level == 50 && jd.level() == 50);
+            boolean current = jd.level() == level && level != 50;
+            String state = completed ? "§a✓ LEVEL REACHED" : current ? "§e★ CURRENT LEVEL" : "§8🔒 LOCKED";
+            Material material = level == 50 ? Material.NETHER_STAR
+                    : completed ? Material.GOLD_INGOT : Material.GOLD_NUGGET;
+            List<String> lore = new ArrayList<>();
+            lore.add(state);
+            lore.add(GuiTheme.divider());
+            lore.add("§7Cash reward: §a" + money(config.cashReward(level)));
+            lore.add(level == 50 ? "§7Master reward: §e" + masterName(j) : "§7Paid automatically on level-up");
+            if (!completed && !current && jd.level() < level) lore.add("§7Reach level §e" + level + " §7to progress.");
+            inv.setItem(slot, item(material, (level == 50 ? "§6§l✦ " : "§6§l") + "Level " + level, lore));
         }
-        if(page>0) inv.setItem(48,item(Material.ARROW,"§ePrevious",List.of()));
-        if(end<50) inv.setItem(50,item(Material.ARROW,"§eNext",List.of()));
-        if(d.get(j).level()>=50&&!d.get(j).level50Rewarded())
-            inv.setItem(49,item(Material.NETHER_STAR,"§6§l⭐ CLAIM MASTER REWARD",List.of("§7Requires storage space.","§eClick to claim")));
-        else
-            inv.setItem(49,item(Material.GOLD_BLOCK,"§6§lMASTER REWARD",List.of(d.get(j).level50Rewarded()?"§a✓ Claimed":"§8Reach Level 50")));
-        inv.setItem(53,item(Material.ARROW,"§eBack",List.of())); p.openInventory(inv);
+
+        if (safePage > 0) inv.setItem(48, item(Material.ARROW, "§e§lPrevious Page", List.of("§7Return to rewards 1–45.")));
+        if (end < 50) inv.setItem(50, item(Material.ARROW, "§e§lNext Page", List.of("§7Continue to rewards 46–50.")));
+        if (jd.level() >= 50 && !jd.level50Rewarded()) {
+            inv.setItem(49, item(Material.NETHER_STAR, "§6§lClaim Masterwork",
+                    List.of("§7Your level 50 reward is ready.", "§7Requires enough free inventory space.", "",
+                            "§eClick once to claim your reward.")));
+        } else {
+            inv.setItem(49, item(jd.level50Rewarded() ? Material.EMERALD_BLOCK : Material.GOLD_BLOCK,
+                    "§6§lMasterwork Reward",
+                    List.of(jd.level50Rewarded() ? "§a✓ Already claimed" : "§8Reach level 50 to unlock.",
+                            "§7Reward: §e" + masterName(j))));
+        }
+        inv.setItem(53, item(Material.ARROW, "§e§lBack to Profession", List.of("§7Return to the profession dossier.")));
+        p.openInventory(inv);
     }
 
     public void openStats(Player p, PlayerJobs d) {
-        Inventory inv=Bukkit.createInventory(new Holder(Menu.STATS,null,null),54,title("gui.stats-title","AevumJobs Statistics"));
-        decorate(inv); int slot=10;
-        for(JobType j:JobType.values()){
-            JobData jd=d.get(j);
-            inv.setItem(slot++,item(j.getMaterial(),"§6§l"+j.getIcon()+" "+j.getDisplayName(),
-                    List.of("§7Level: §f"+jd.level(),"§7XP: §f"+Math.round(jd.xp()),"§7Total XP: §f"+jd.totalXp(),"§7Actions: §f"+jd.actions(),"§7Earned: §f"+money(jd.totalEarned()))));
-            if(slot==17)slot=19;if(slot==26)slot=28;if(slot==35)slot=37;if(slot==44)break;
+        Inventory inv = Bukkit.createInventory(new Holder(Menu.STATS, null, null), 54,
+                title("gui.stats-title", "§8⚜ §6Personal Records"));
+        decorate(inv);
+        inv.setItem(4, playerHead(p, "§6§l" + p.getName() + " — Personal Record",
+                List.of("§7THE IMPERIAL ARCHIVE", GuiTheme.divider(),
+                        "§7Every statistic below comes from your saved job data.")));
+
+        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23};
+        JobType[] all = JobType.values();
+        for (int i = 0; i < all.length && i < slots.length; i++) {
+            JobType j = all[i];
+            JobData jd = d.get(j);
+            inv.setItem(slots[i], item(j.getMaterial(), "§6§l" + j.getDisplayName(),
+                    List.of(d.isActive(j) ? "§a● ACTIVE" : "§8○ INACTIVE",
+                            "§7Level: §e" + jd.level() + " §8/ §f50",
+                            "§7XP: §f" + number(Math.round(jd.xp())) + " §8/ §f" + reqText(jd.level()),
+                            GuiTheme.progressBar(progress(jd), 8) + " §e" + progressPct(jd),
+                            "§7Lifetime XP: §f" + number(jd.totalXp()),
+                            "§7Actions: §f" + number(jd.actions()),
+                            "§7Earned: §a" + money(jd.totalEarned()),
+                            "", "§eClick to inspect progression.")));
         }
-        int highest=d.all().stream().mapToInt(JobData::level).max().orElse(0);
-        long totalXp=d.all().stream().mapToLong(JobData::totalXp).sum();
-        double totalEarned=d.all().stream().mapToDouble(JobData::totalEarned).sum();
-        inv.setItem(49,item(Material.EXPERIENCE_BOTTLE,"§6§lACCOUNT TOTALS",List.of("§7Active: §f"+d.activeCount()+" / "+config.activeLimit(),"§7Highest Level: §f"+highest,"§7Total XP: §f"+totalXp,"§7Total Earned: §f"+money(totalEarned))));
-        inv.setItem(53,item(Material.ARROW,"§eBack",List.of())); p.openInventory(inv);
+
+        inv.setItem(31, item(Material.EXPERIENCE_BOTTLE, "§6§lCareer Summary",
+                List.of(GuiTheme.divider(),
+                        "§7Active professions: §e" + d.activeCount() + "§8/§e" + config.activeLimit(),
+                        "§7Combined job levels: §e" + combinedLevels(d),
+                        "§7Highest profession level: §e" + highestLevel(d),
+                        "§7Total job XP: §f" + number(totalXp(d)),
+                        "§7Total actions: §f" + number(totalActions(d)),
+                        "§7Lifetime earnings: §a" + money(totalEarned(d)))));
+        inv.setItem(49, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to the main jobs screen.")));
+        inv.setItem(53, item(Material.BARRIER, "§c§lClose", List.of("§7Close the jobs interface.")));
+        p.openInventory(inv);
     }
 
     public void openLeaderboard(Player p, PlayerJobs d) {
-        Inventory inv=Bukkit.createInventory(new Holder(Menu.LEADERBOARD,null,null),54,title("gui.leaderboard-title","AevumJobs Leaderboards"));
-        decorate(inv); p.openInventory(inv);
-        for(int i=0;i<JobType.values().length;i++){
-            JobType job=JobType.values()[i]; int slot=JOB_SLOTS[i];
-            inv.setItem(slot,item(job.getMaterial(),"§6§l"+job.getIcon()+" "+job.getDisplayName(),List.of("§7Loading top 6 specialists...")));
-            jobs.leaderboard(job,6).thenAccept(list->Bukkit.getScheduler().runTask(plugin,()->{
-                if(!p.isOnline()||!(p.getOpenInventory().getTopInventory().getHolder() instanceof Holder h)||h.menu()!=Menu.LEADERBOARD)return;
-                List<String> lore=new ArrayList<>(); int rank=1;
-                if(list.isEmpty())lore.add("§8No ranked players yet.");
-                for(Database.LeaderboardEntry e:list){
-                    Player online=Bukkit.getPlayer(e.uuid()); String name=online!=null?online.getName():Optional.ofNullable(Bukkit.getOfflinePlayer(e.uuid()).getName()).orElse(e.uuid().toString().substring(0,8));
-                    String medal=switch(rank){case 1->"§e🥇";case 2->"§f🥈";case 3->"§6🥉";default->"§7"+rank;};
-                    lore.add(medal+" §f"+name+" §7• §fLv."+e.level()+" §8("+e.totalXp()+" XP)");
+        Holder holder = new Holder(Menu.LEADERBOARD, null, null);
+        Inventory inv = Bukkit.createInventory(holder, 54,
+                title("gui.leaderboard-title", "§8⚜ §6Imperial Rankings"));
+        decorate(inv);
+        inv.setItem(4, item(Material.GOLDEN_HELMET, "§6§lHall of Specialists",
+                List.of("§7The leading six players in each profession.", "§7Rankings use persisted profession XP.", "",
+                        "§eResults load without blocking the server thread.")));
+        p.openInventory(inv);
+
+        for (int i = 0; i < JobType.values().length; i++) {
+            JobType job = JobType.values()[i];
+            int slot = JOB_SLOTS[i];
+            inv.setItem(slot, item(job.getMaterial(), "§6§l" + job.getDisplayName(),
+                    List.of("§7Loading the imperial register...")));
+            jobs.leaderboard(job, 6).thenAccept(list -> Bukkit.getScheduler().runTask(plugin, () -> {
+                if (!p.isOnline() || p.getOpenInventory().getTopInventory().getHolder() != holder) return;
+                List<String> lore = new ArrayList<>();
+                lore.add("§7TOP SPECIALISTS");
+                lore.add(GuiTheme.divider());
+                int rank = 1;
+                if (list.isEmpty()) lore.add("§8No ranked players yet.");
+                for (Database.LeaderboardEntry entry : list) {
+                    Player online = Bukkit.getPlayer(entry.uuid());
+                    String name = online != null ? online.getName()
+                            : Optional.ofNullable(Bukkit.getOfflinePlayer(entry.uuid()).getName())
+                                    .orElse(entry.uuid().toString().substring(0, 8));
+                    String medal = switch (rank) {
+                        case 1 -> "§6✦";
+                        case 2 -> "§f◆";
+                        case 3 -> "§c◆";
+                        default -> "§8" + rank + ".";
+                    };
+                    lore.add(medal + " §f" + name);
+                    lore.add("  §7Level §e" + entry.level() + " §8• §f" + number(entry.totalXp()) + " XP");
                     rank++;
                 }
-                p.getOpenInventory().getTopInventory().setItem(slot,item(job.getMaterial(),"§6§l"+job.getIcon()+" "+job.getDisplayName(),lore));
+                if (list.stream().noneMatch(e -> e.uuid().equals(p.getUniqueId()))) {
+                    lore.add("");
+                    lore.add("§8Your position is not in this top six.");
+                }
+                inv.setItem(slot, item(job.getMaterial(), "§6§l" + job.getDisplayName(), lore));
             }));
         }
-        inv.setItem(53,item(Material.ARROW,"§eBack",List.of()));
+        inv.setItem(53, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to the main jobs screen.")));
     }
 
     private void addJobCards(Inventory inv, PlayerJobs d) {
-        JobType[] all=JobType.values();
-        for(int i=0;i<all.length;i++){
-            JobType j=all[i]; JobData jd=d.get(j);
-            String status=d.isActive(j)?"§a● ACTIVE":"§8○ INACTIVE";
-            inv.setItem(JOB_SLOTS[i],item(j.getMaterial(),"§6§l"+j.getIcon()+" "+j.getDisplayName(),
-                    List.of("§7"+j.getDescription(),"",status,"§7Level: §f"+jd.level(),"§7XP: §f"+Math.round(jd.xp())+" / "+reqText(jd.level()),"§7Progress: §f"+progressPct(jd),"§7Total XP: §f"+jd.totalXp(),"§7Total Earned: §f"+money(jd.totalEarned()),"","§eClick to view")));
+        JobType[] all = JobType.values();
+        for (int i = 0; i < all.length && i < JOB_SLOTS.length; i++) {
+            JobType j = all[i];
+            JobData jd = d.get(j);
+            boolean active = d.isActive(j);
+            String status = active ? "§a● ACTIVE PROFESSION" : "§8○ NOT ACTIVE";
+            List<String> lore = new ArrayList<>();
+            lore.add("§7" + j.getDescription());
+            lore.add(GuiTheme.divider());
+            lore.add(status);
+            lore.add("§7Level: §e" + jd.level() + " §8/ §f50");
+            lore.add("§7XP: §f" + number(Math.round(jd.xp())) + " §8/ §f" + reqText(jd.level()));
+            lore.add(GuiTheme.progressBar(progress(jd), 10) + " §e" + progressPct(jd));
+            lore.add("§7Lifetime XP: §f" + number(jd.totalXp()));
+            lore.add("§7Earned: §a" + money(jd.totalEarned()));
+            lore.add("");
+            lore.add(active ? "§eClick to view your active dossier." : "§eClick to inspect this profession.");
+            inv.setItem(JOB_SLOTS[i], item(j.getMaterial(), "§6§l" + j.getDisplayName(), lore));
         }
     }
 
-    private void addActive(Inventory inv,PlayerJobs d){
-        int[] slots={45,46,47}; int i=0;
-        for(JobType j:d.active()){
-            JobData jd=d.get(j);
-            inv.setItem(slots[i++],item(j.getMaterial(),"§6§l"+j.getIcon()+" "+j.getDisplayName(),List.of("§7Level: §f"+jd.level(),"§7XP: §f"+Math.round(jd.xp()),"§eClick to view")));
+    private void addActive(Inventory inv, PlayerJobs d) {
+        int[] slots = {45, 46, 47};
+        int i = 0;
+        for (JobType j : d.active()) {
+            if (i >= slots.length) break;
+            JobData jd = d.get(j);
+            inv.setItem(slots[i++], item(j.getMaterial(), "§a§l" + j.getDisplayName(),
+                    List.of("§aACTIVE EMPLOYMENT", "§7Level: §e" + jd.level() + " §8/ §f50",
+                            GuiTheme.progressBar(progress(jd), 8) + " §e" + progressPct(jd),
+                            "", "§eClick to browse or manage professions.")));
         }
-        while(i<3)inv.setItem(slots[i++],item(Material.GRAY_STAINED_GLASS_PANE,"§8＋ Empty Profession Slot",List.of("§7Click to choose a profession.")));
+        while (i < slots.length) {
+            inv.setItem(slots[i++], item(Material.GRAY_STAINED_GLASS_PANE, "§8§lEmpty Employment Slot",
+                    List.of("§7There is room for another active profession.", "", "§eClick to browse professions.")));
+        }
     }
 
-    private void decorate(Inventory inv){
-        for(int s:new int[]{0,1,2,3,5,6,7,8,9,17,18,26,27,35,36,44,45,48,51,52}) inv.setItem(s,item(Material.BLACK_STAINED_GLASS_PANE,"§8",List.of()));
+    /** Draw a restrained obsidian frame; content slots remain open and readable. */
+    private void decorate(Inventory inv) {
+        int size = inv.getSize();
+        Material dark = Material.BLACK_STAINED_GLASS_PANE;
+        Material edge = Material.GRAY_STAINED_GLASS_PANE;
+        for (int slot = 0; slot < size; slot++) {
+            int row = slot / 9;
+            int col = slot % 9;
+            boolean border = row == 0 || row == (size / 9) - 1 || col == 0 || col == 8;
+            if (!border) continue;
+            Material pane = (col == 0 || col == 8) ? edge : dark;
+            if (row == 0 && (col == 2 || col == 6)) pane = Material.BROWN_STAINED_GLASS_PANE;
+            inv.setItem(slot, item(pane, "§0", List.of()));
+        }
     }
-    private ItemStack item(Material mat,String name,List<String> lore){
-        ItemStack stack=new ItemStack(mat);
-        ItemMeta meta=stack.getItemMeta();
-        if(meta == null) return stack;
 
-        // Keep the legacy formatting codes. Stripping them here removed every
-        // colour from every GUI item, making the entire menu look unfinished.
+    private ItemStack playerHead(Player p, String name, List<String> lore) {
+        ItemStack stack = new ItemStack(Material.PLAYER_HEAD);
+        ItemMeta raw = stack.getItemMeta();
+        if (raw instanceof SkullMeta meta) {
+            meta.setOwningPlayer(p);
+            meta.setDisplayName(name);
+            meta.setLore(new ArrayList<>(lore));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            stack.setItemMeta(meta);
+        }
+        return stack;
+    }
+
+    private ItemStack item(Material material, String name, List<String> lore) {
+        ItemStack stack = new ItemStack(material == null ? Material.PAPER : material);
+        ItemMeta meta = stack.getItemMeta();
+        if (meta == null) return stack;
+        // Intentionally retain legacy formatting codes: stripping them removes
+        // the dark-gold theme and makes every item appear unformatted.
         meta.setDisplayName(name);
         meta.setLore(new ArrayList<>(lore));
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         stack.setItemMeta(meta);
         return stack;
     }
-    private String title(String path,String fallback){return config.config().getString(path,fallback);}
-    private String reqText(int level){return level>=50?"MAX":String.format("%,.0f XP",config.requiredXp(level));}
-    private String money(double v){return String.format("$%,.0f",v);}
-    private String progressPct(JobData d){if(d.level()>=50)return "100%";return String.format("%.0f%%",Math.min(100,d.xp()/config.requiredXp(d.level())*100));}
-    private String progressBar(JobData d){if(d.level()>=50)return "§6████████████████████ 100%";int filled=(int)Math.round(Math.min(1,d.xp()/config.requiredXp(d.level()))*20);return "§6"+"█".repeat(filled)+"§8"+"░".repeat(20-filled)+" §f"+progressPct(d);}
-    private String masterName(JobType j){return config.config().getString("master-rewards."+j.key()+".name","Master "+j.getDisplayName());}
-    public static final class Holder implements InventoryHolder{
-        private final Menu menu; private final JobType job; private final UUID target; private final int page;
-        public Holder(Menu menu,JobType job,UUID target){this(menu,job,target,0);}
-        public Holder(Menu menu,JobType job,UUID target,int page){this.menu=menu;this.job=job;this.target=target;this.page=page;}
-        public Menu menu(){return menu;} public JobType job(){return job;} public UUID target(){return target;} public int page(){return page;}
-        @Override public Inventory getInventory(){return null;}
+
+    private String title(String path, String fallback) {
+        return config.config().getString(path, fallback);
+    }
+
+    private String reqText(int level) {
+        return level >= 50 ? "MAX" : number(Math.round(config.requiredXp(level))) + " XP";
+    }
+
+    private String money(double value) {
+        return plugin.getEconomy().format(Math.max(0, value));
+    }
+
+    private String number(long value) {
+        return GuiTheme.number(value);
+    }
+
+    private double progress(JobData data) {
+        if (data.level() >= 50) return 1.0;
+        double required = config.requiredXp(data.level());
+        if (!Double.isFinite(required) || required <= 0) return 0.0;
+        return Math.max(0.0, Math.min(1.0, data.xp() / required));
+    }
+
+    private String progressPct(JobData data) {
+        return data.level() >= 50 ? "100%" : GuiTheme.percent(progress(data));
+    }
+
+    private String masterName(JobType job) {
+        return config.config().getString("master-rewards." + job.key() + ".name",
+                "Master " + job.getDisplayName());
+    }
+
+    private long combinedLevels(PlayerJobs data) {
+        return data.all().stream().mapToLong(JobData::level).sum();
+    }
+
+    private int highestLevel(PlayerJobs data) {
+        return data.all().stream().mapToInt(JobData::level).max().orElse(0);
+    }
+
+    private long totalXp(PlayerJobs data) {
+        return data.all().stream().mapToLong(JobData::totalXp).sum();
+    }
+
+    private long totalActions(PlayerJobs data) {
+        return data.all().stream().mapToLong(JobData::actions).sum();
+    }
+
+    private double totalEarned(PlayerJobs data) {
+        return data.all().stream().mapToDouble(JobData::totalEarned).sum();
+    }
+
+    public static final class Holder implements InventoryHolder {
+        private final Menu menu;
+        private final JobType job;
+        private final UUID target;
+        private final int page;
+
+        public Holder(Menu menu, JobType job, UUID target) {
+            this(menu, job, target, 0);
+        }
+
+        public Holder(Menu menu, JobType job, UUID target, int page) {
+            this.menu = menu;
+            this.job = job;
+            this.target = target;
+            this.page = page;
+        }
+
+        public Menu menu() { return menu; }
+        public JobType job() { return job; }
+        public UUID target() { return target; }
+        public int page() { return page; }
+
+        @Override
+        public Inventory getInventory() { return null; }
     }
 }
