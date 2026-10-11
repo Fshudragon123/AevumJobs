@@ -1,6 +1,7 @@
 package net.aevummc.jobs;
 
 import net.aevummc.jobs.antiabuse.AntiAbuseService;
+import net.aevummc.jobs.achievement.AchievementService;
 import net.aevummc.jobs.command.JobsCommand;
 import net.aevummc.jobs.command.JobsTabCompleter;
 import net.aevummc.jobs.config.ConfigManager;
@@ -21,6 +22,7 @@ public final class AevumJobs extends JavaPlugin {
     private Database database;
     private EconomyService economy;
     private RewardService rewards;
+    private AchievementService achievements;
     private JobService jobs;
     private GuiManager gui;
 
@@ -38,7 +40,8 @@ public final class AevumJobs extends JavaPlugin {
         if(!economy.setup()) getLogger().warning("Vault/economy not available. XP remains usable, cash payouts will wait for an economy provider.");
         AntiAbuseService anti=new AntiAbuseService(config,database);
         rewards=new RewardService(this,config,economy);
-        jobs=new JobService(this,config,rewards,anti);
+        achievements=new AchievementService(config);
+        jobs=new JobService(this,config,rewards,anti,achievements);
         gui=new GuiManager(this,config,jobs,rewards);
         getServer().getPluginManager().registerEvents(new JobListener(this,jobs,config,gui),this);
 
