@@ -8,6 +8,7 @@ import net.aevummc.jobs.service.JobService;
 import net.aevummc.jobs.service.PlayerJobs;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -52,10 +53,13 @@ public final class JobListener implements Listener {
     @EventHandler(ignoreCancelled=true) public void onFish(PlayerFishEvent e){if(e.getState()==PlayerFishEvent.State.CAUGHT_FISH)jobs.addXp(e.getPlayer(),JobType.FISHERMAN,config.xp(JobType.FISHERMAN,"catch",null));}
     @EventHandler(ignoreCancelled=true) public void onBreed(EntityBreedEvent e){if(!(e.getBreeder() instanceof Player p))return;long now=System.currentTimeMillis();long cd=config.config().getLong("anti-abuse.rancher.breeding-cooldown-ms",5000);Long last=breederCooldown.put(p.getUniqueId(),now);if(last==null||now-last>=cd)jobs.addXp(p,JobType.RANCHER,config.xp(JobType.RANCHER,"breed",null));}
     @EventHandler(ignoreCancelled=true) public void onDeath(EntityDeathEvent e){
-        org.bukkit.entity.LivingEntity dead=e.getEntity();if(!processedDeaths.add(dead.getUniqueId()))return;Player killer=dead.getKiller();if(killer==null)return;
+        org.bukkit.entity.LivingEntity dead=e.getEntity();
+        if(!processedDeaths.add(dead.getUniqueId()))return;
+        // Always evict the transient death guard, including deaths without a killer.
+        plugin.getServer().getScheduler().runTaskLater(plugin,()->processedDeaths.remove(dead.getUniqueId()),1L);
+        Player killer=dead.getKiller();if(killer==null)return;
         if(dead instanceof Player victim){double mult=jobs.warriorMultiplier(killer.getUniqueId(),victim.getUniqueId());if(mult>0)jobs.addXp(killer,JobType.WARRIOR,config.xp(JobType.WARRIOR,"kill",null)*mult);}
         else if(validHunter(dead))jobs.addXp(killer,JobType.HUNTER,config.xp(JobType.HUNTER,"kill",null));
-        plugin.getServer().getScheduler().runTaskLater(plugin,()->processedDeaths.remove(dead.getUniqueId()),1L);
     }
     private boolean validHunter(Entity e){return !e.hasMetadata("NPC")&&!e.hasMetadata("npc")&&!e.hasMetadata("CitizensNPC")&&!e.hasMetadata("AevumFakeEntity")&&config.config().getStringList("anti-abuse.hunter.invalid-entities").stream().noneMatch(x->x.equalsIgnoreCase(e.getType().name()));}
     @EventHandler(ignoreCancelled=true) public void onEnchant(EnchantItemEvent e){jobs.addXp(e.getEnchanter(),JobType.ENCHANTER,config.xp(JobType.ENCHANTER,"enchant",null));}
@@ -64,19 +68,153 @@ public final class JobListener implements Listener {
     @EventHandler(ignoreCancelled=true) public void onOpen(InventoryOpenEvent e){if(e.getPlayer() instanceof Player p&&e.getInventory().getType()==InventoryType.BREWING){Object holder=e.getInventory().getHolder();if(holder instanceof org.bukkit.block.BrewingStand stand)lastBrewingPlayer.put("brew:"+key(stand.getLocation()),p.getUniqueId());}}
     @EventHandler(ignoreCancelled=true) public void onBrew(BrewEvent e){UUID id=lastBrewingPlayer.remove("brew:"+key(e.getBlock().getLocation()));if(id==null)return;Player p=plugin.getServer().getPlayer(id);if(p!=null)jobs.addXp(p,JobType.ALCHEMIST,config.xp(JobType.ALCHEMIST,"brew",null));}
     @EventHandler(ignoreCancelled=true) public void onCartography(InventoryClickEvent e){if(e.getWhoClicked() instanceof Player p&&e.getView().getTopInventory().getType()==InventoryType.CARTOGRAPHY&&e.getRawSlot()==2&&e.getCurrentItem()!=null&&e.getCurrentItem().getType()!=Material.AIR)jobs.addXp(p,JobType.SCHOLAR,config.xp(JobType.SCHOLAR,"map",null));}
-    @EventHandler(priority=EventPriority.HIGHEST) public void onGuiClick(InventoryClickEvent e){
-        if(!(e.getWhoClicked() instanceof Player p))return;if(!(e.getView().getTopInventory().getHolder() instanceof GuiManager.Holder h))return;e.setCancelled(true);int slot=e.getRawSlot();PlayerJobs data=jobs.get(p.getUniqueId());if(data==null)return;
-        switch(h.menu()){
-            case MAIN->{if(slot==49)gui.openStats(p,data);else if(slot==50)gui.openManage(p,data);else if(slot==52)gui.openLeaderboard(p,data);else if(slot==53)p.closeInventory();else if(Arrays.stream(GuiManager.JOB_SLOTS).anyMatch(x->x==slot)){int i=index(GuiManager.JOB_SLOTS,slot);if(i>=0)gui.openProgression(p,data,JobType.values()[i]);}else if(slot>=45&&slot<=47&&data.activeCount()<config.activeLimit())gui.openSelection(p,data);}
-            case SELECT->{if(slot==49)gui.openMain(p,data);else if(slot==53)p.closeInventory();else if(Arrays.stream(GuiManager.JOB_SLOTS).anyMatch(x->x==slot)){JobType j=JobType.values()[index(GuiManager.JOB_SLOTS,slot)];if(data.isActive(j))gui.openProgression(p,data,j);else if(data.activeCount()>=config.activeLimit()){p.sendMessage("§6§lAevumJobs §7» §c⚠ 3/3 PROFESSIONS ACTIVE. Leave one profession before joining another.");gui.openManage(p,data);}else{jobs.join(data,j);p.sendMessage(config.message("joined","&6&lAevumJobs &7» &a✓ Profession activated: &f{job}&a.").replace("{job}",j.getDisplayName()).replace('&','§'));gui.openProgression(p,data,j);}}}
-            case MANAGE->{if(slot==49)gui.openMain(p,data);else if(slot==53)p.closeInventory();else if(slot>=20&&slot<=22){List<JobType>a=new ArrayList<>(data.active());int i=slot-20;if(i<a.size()){JobType j=a.get(i);if(e.getClick().isRightClick())gui.openConfirm(p,data,j);else gui.openProgression(p,data,j);}}}
-            case CONFIRM->{JobType j=h.job();if(slot==15){jobs.leave(data,j);p.sendMessage(config.message("left","&6&lAevumJobs &7» &eProfession left: &f{job}&e. Your progression is preserved.").replace("{job}",j.getDisplayName()).replace('&','§'));gui.openManage(p,data);}else if(slot==13)gui.openManage(p,data);}
-            case PROGRESSION->{JobType j=h.job();if(slot==41)gui.openRewards(p,data,j,0);else if(slot==49)gui.openMain(p,data);else if(slot==53)p.closeInventory();else if(slot==43){if(data.isActive(j))gui.openConfirm(p,data,j);else if(data.activeCount()>=config.activeLimit()){p.sendMessage("§6§lAevumJobs §7» §c⚠ 3/3 PROFESSIONS ACTIVE.");gui.openManage(p,data);}else{jobs.join(data,j);p.sendMessage("§6§lAevumJobs §7» §a✓ Profession activated: §f"+j.getDisplayName());gui.openProgression(p,data,j);}}}
-            case REWARDS->{JobType j=h.job();if(slot==53)gui.openProgression(p,data,j);else if(slot==48&&h.page()>0)gui.openRewards(p,data,j,h.page()-1);else if(slot==50&&(h.page()+1)*45<50)gui.openRewards(p,data,j,h.page()+1);else if(slot==49&&data.get(j).level()>=50&&!data.get(j).level50Rewarded()){if(plugin.getRewards().claimMaster(p,data,j))p.sendMessage("§6§lAevumJobs §7» §a⭐ Master reward claimed!");gui.openRewards(p,data,j,h.page());}}
-            case STATS->{if(slot==53)gui.openMain(p,data);}
-            case LEADERBOARD->{if(slot==53)gui.openMain(p,data);}
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void onGuiClick(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player p)) return;
+        if (!(e.getView().getTopInventory().getHolder() instanceof GuiManager.Holder h)) return;
+
+        int slot = e.getRawSlot();
+        int topSize = e.getView().getTopInventory().getSize();
+
+        // Keep ordinary inventory management available below the GUI, but never
+        // allow shift-clicks to transfer items into/out of a plugin inventory.
+        if (slot < 0) return;
+        if (e.isShiftClick()) {
+            e.setCancelled(true);
+            return;
+        }
+        if (slot >= topSize) return;
+        e.setCancelled(true);
+
+        PlayerJobs data = jobs.get(p.getUniqueId());
+        if (data == null) return;
+        p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.45f, 1.25f);
+
+        switch (h.menu()) {
+            case MAIN -> {
+                if (slot == 4 || slot == 49) gui.openStats(p, data);
+                else if (slot == 48) p.performCommand("jobs help");
+                else if (slot == 50) gui.openManage(p, data);
+                else if (slot == 52) gui.openLeaderboard(p, data);
+                else if (slot == 53) p.closeInventory();
+                else if (Arrays.stream(GuiManager.JOB_SLOTS).anyMatch(x -> x == slot)) {
+                    int i = index(GuiManager.JOB_SLOTS, slot);
+                    if (i >= 0 && i < JobType.values().length) gui.openProgression(p, data, JobType.values()[i]);
+                } else if (slot >= 45 && slot <= 47) {
+                    if (data.activeCount() < config.activeLimit()) gui.openSelection(p, data);
+                    else gui.openManage(p, data);
+                }
+            }
+            case SELECT -> {
+                if (slot == 49) gui.openMain(p, data);
+                else if (slot == 53) p.closeInventory();
+                else if (Arrays.stream(GuiManager.JOB_SLOTS).anyMatch(x -> x == slot)) {
+                    int i = index(GuiManager.JOB_SLOTS, slot);
+                    if (i < 0 || i >= JobType.values().length) break;
+                    JobType j = JobType.values()[i];
+                    if (data.isActive(j)) gui.openProgression(p, data, j);
+                    else if (data.activeCount() >= config.activeLimit()) {
+                        p.sendMessage("§6§lAevumJobs §7» §cAll " + config.activeLimit()
+                                + " active profession slots are occupied. Leave one before joining another.");
+                        gui.openManage(p, data);
+                    } else {
+                        jobs.join(data, j);
+                        p.sendMessage(config.message("joined", "&6&lAevumJobs &7» &aProfession activated: &f{job}&a.")
+                                .replace("{job}", j.getDisplayName()).replace('&', '§'));
+                        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8f, 1.2f);
+                        gui.openProgression(p, data, j);
+                    }
+                }
+            }
+            case MANAGE -> {
+                if (slot == 49) gui.openMain(p, data);
+                else if (slot == 53) p.closeInventory();
+                else if (slot == 48) gui.openSelection(p, data);
+                else if (slot >= 20 && slot <= 22) {
+                    List<JobType> active = new ArrayList<>(data.active());
+                    int i = slot - 20;
+                    if (i < active.size()) {
+                        JobType j = active.get(i);
+                        if (e.getClick().isRightClick()) gui.openConfirm(p, data, j);
+                        else gui.openProgression(p, data, j);
+                    } else if (data.activeCount() < config.activeLimit()) {
+                        gui.openSelection(p, data);
+                    } else {
+                        p.sendMessage("§6§lAevumJobs §7» §cNo active profession slots remain.");
+                    }
+                }
+            }
+            case CONFIRM -> {
+                JobType j = h.job();
+                if (j == null) {
+                    gui.openManage(p, data);
+                    break;
+                }
+                if (slot == 15 && data.isActive(j)) {
+                    jobs.leave(data, j);
+                    p.sendMessage(config.message("left", "&6&lAevumJobs &7» &eProfession left: &f{job}&e. Your progression is preserved.")
+                            .replace("{job}", j.getDisplayName()).replace('&', '§'));
+                    p.playSound(p.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 0.7f, 1.2f);
+                    gui.openManage(p, data);
+                } else if (slot == 13) {
+                    gui.openManage(p, data);
+                }
+            }
+            case PROGRESSION -> {
+                JobType j = h.job();
+                if (j == null) break;
+                if (slot == 41) gui.openRewards(p, data, j, 0);
+                else if (slot == 49) gui.openMain(p, data);
+                else if (slot == 53) p.closeInventory();
+                else if (slot == 43) {
+                    if (data.isActive(j)) gui.openConfirm(p, data, j);
+                    else if (data.activeCount() >= config.activeLimit()) {
+                        p.sendMessage("§6§lAevumJobs §7» §cAll " + config.activeLimit()
+                                + " active profession slots are occupied. Leave one before joining another.");
+                        gui.openManage(p, data);
+                    } else {
+                        jobs.join(data, j);
+                        p.sendMessage(config.message("joined", "&6&lAevumJobs &7» &aProfession activated: &f{job}&a.")
+                                .replace("{job}", j.getDisplayName()).replace('&', '§'));
+                        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8f, 1.2f);
+                        gui.openProgression(p, data, j);
+                    }
+                }
+            }
+            case REWARDS -> {
+                JobType j = h.job();
+                if (j == null) break;
+                if (slot == 53) gui.openProgression(p, data, j);
+                else if (slot == 48 && h.page() > 0) gui.openRewards(p, data, j, h.page() - 1);
+                else if (slot == 50 && (h.page() + 1) * 45 < 50) gui.openRewards(p, data, j, h.page() + 1);
+                else if (slot == 49 && data.get(j).level() >= 50 && !data.get(j).level50Rewarded()) {
+                    if (plugin.getRewards().claimMaster(p, data, j)) {
+                        p.sendMessage("§6§lAevumJobs §7» §aMasterwork claimed successfully.");
+                        p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.9f, 1.1f);
+                    }
+                    gui.openRewards(p, data, j, h.page());
+                }
+            }
+            case STATS -> {
+                if (slot == 49 || slot == 53) gui.openMain(p, data);
+                else {
+                    int i = index(GuiManager.STAT_SLOTS, slot);
+                    if (i >= 0 && i < JobType.values().length) gui.openProgression(p, data, JobType.values()[i]);
+                }
+            }
+            case LEADERBOARD -> {
+                if (slot == 53) gui.openMain(p, data);
+            }
         }
     }
+
+    @EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
+    public void onGuiDrag(InventoryDragEvent e) {
+        if (!(e.getView().getTopInventory().getHolder() instanceof GuiManager.Holder)) return;
+        int topSize = e.getView().getTopInventory().getSize();
+        if (e.getRawSlots().stream().anyMatch(slot -> slot >= 0 && slot < topSize)) e.setCancelled(true);
+    }
+
     private int index(int[]a,int v){for(int i=0;i<a.length;i++)if(a[i]==v)return i;return -1;}
     @EventHandler(ignoreCancelled=true) public void onAnvilSmithing(InventoryClickEvent e){if(!(e.getWhoClicked() instanceof Player p)||e.getRawSlot()<0)return;InventoryType t=e.getView().getTopInventory().getType();if((t==InventoryType.ANVIL&&e.getRawSlot()==2)||(t==InventoryType.SMITHING&&e.getRawSlot()==3)){if(e.getCurrentItem()!=null&&e.getCurrentItem().getType()!=Material.AIR)jobs.addXp(p,JobType.BLACKSMITH,t==InventoryType.ANVIL?config.xp(JobType.BLACKSMITH,"repair",null):config.xp(JobType.BLACKSMITH,"smith",null));}}
     private boolean isEquipment(Material m){String n=m.name();return n.endsWith("_SWORD")||n.endsWith("_PICKAXE")||n.endsWith("_AXE")||n.endsWith("_SHOVEL")||n.endsWith("_HOE")||n.endsWith("_HELMET")||n.endsWith("_CHESTPLATE")||n.endsWith("_LEGGINGS")||n.endsWith("_BOOTS")||n.equals("SHIELD")||n.equals("BOW")||n.equals("CROSSBOW")||n.equals("TRIDENT")||n.equals("FISHING_ROD");}
