@@ -1,6 +1,7 @@
 package net.aevummc.jobs.gui;
 
 import net.aevummc.jobs.AevumJobs;
+import net.aevummc.jobs.achievement.AchievementService;
 import net.aevummc.jobs.config.ConfigManager;
 import net.aevummc.jobs.database.Database;
 import net.aevummc.jobs.job.JobData;
@@ -25,9 +26,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public final class GuiManager {
-    public enum Menu { MAIN, SELECT, MANAGE, CONFIRM, PROGRESSION, REWARDS, STATS, LEADERBOARD }
+    public enum Menu { MAIN, SELECT, MANAGE, CONFIRM, PROGRESSION, REWARDS, STATS, LEADERBOARD, ACHIEVEMENTS }
     public static final int[] JOB_SLOTS = {10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34};
     public static final int[] STAT_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23};
+    public static final int[] ACHIEVEMENT_SLOTS = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
 
     private final AevumJobs plugin;
     private final ConfigManager config;
@@ -43,6 +45,7 @@ public final class GuiManager {
 
     /** Main hub: profession gallery, player overview and consistent utility footer. */
     public void openMain(Player p, PlayerJobs d) {
+        jobs.refreshAchievements(d, p, false);
         Inventory inv = Bukkit.createInventory(new Holder(Menu.MAIN, null, null),
                 54, title("gui.main-title", "§8⚜ §6Aevum Imperium §8• §fJobs"));
         decorate(inv);
@@ -54,8 +57,10 @@ public final class GuiManager {
                         "", "§eYour record across Aevum.")));
         addJobCards(inv, d);
         addActive(inv, d);
-        inv.setItem(48, item(Material.WRITABLE_BOOK, "§e§lHelp & Commands",
-                List.of("§7A quick guide to the job system.", "", "§eClick to view available commands.")));
+        inv.setItem(48, item(Material.NETHER_STAR, "§6§lAchievement Codex",
+                List.of("§7Your permanent career honours.", "§7Unlocked: §e" + d.completedAchievements().size()
+                                + " §8/ §f" + jobs.achievementService().all().size(),
+                        "", "§eClick to inspect achievements.")));
         inv.setItem(49, item(Material.KNOWLEDGE_BOOK, "§6§lPersonal Records",
                 List.of("§7Your XP, earnings and profession levels.", "", "§eClick to inspect your record.")));
         inv.setItem(50, item(Material.LECTERN, "§6§lMy Professions",
@@ -305,7 +310,8 @@ public final class GuiManager {
         decorate(inv);
         inv.setItem(4, playerHead(p, "§6§l" + p.getName() + " — Personal Record",
                 List.of("§7THE IMPERIAL ARCHIVE", GuiTheme.divider(),
-                        "§7Every statistic below comes from your saved job data.")));
+                        "§7Every statistic below comes from your saved job data.",
+                        "§8Need command help? Use §f/jobs help§8.")));
 
         int[] slots = STAT_SLOTS;
         JobType[] all = JobType.values();
@@ -332,6 +338,77 @@ public final class GuiManager {
                         "§7Total actions: §f" + number(totalActions(d)),
                         "§7Lifetime earnings: §a" + money(totalEarned(d)))));
         inv.setItem(49, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to the main jobs screen.")));
+        inv.setItem(53, item(Material.BARRIER, "§c§lClose", List.of("§7Close the jobs interface.")));
+        p.openInventory(inv);
+    }
+
+    /** Paginated, view-only achievements. Completion is permanent and persisted by the database. */
+    public void openAchievements(Player p, PlayerJobs d, int page) {
+        jobs.refreshAchievements(d, p, false);
+        AchievementService service = jobs.achievementService();
+        List<AchievementService.Achievement> all = service.all();
+        int pages = Math.max(1, (all.size() + ACHIEVEMENT_SLOTS.length - 1) / ACHIEVEMENT_SLOTS.length);
+        int safePage = Math.max(0, Math.min(pages - 1, page));
+        int start = safePage * ACHIEVEMENT_SLOTS.length;
+        int end = Math.min(all.size(), start + ACHIEVEMENT_SLOTS.length);
+        Inventory inv = Bukkit.createInventory(new Holder(Menu.ACHIEVEMENTS, null, null, safePage), 54,
+                title("gui.achievements-title", "§8⚜ §6Achievement Codex") + " §8• §f" + (safePage + 1) + "/" + pages);
+        decorate(inv);
+        inv.setItem(4, playerHead(p, "§6§lThe Imperial Achievement Codex",
+                List.of("§7A permanent record of your service to Aevum.", GuiTheme.divider(),
+                        "§7Unlocked: §e" + d.completedAchievements().size() + " §8/ §f" + all.size(),
+                        "§7Achievement completions are prestige-only.",
+                        "§7Progress is calculated from saved job statistics.")));
+
+        if (!service.enabled()) {
+            inv.setItem(22, item(Material.BARRIER, "§c§lAchievements Disabled",
+                    List.of("§7The server owner has disabled achievements.", "§7Ask an administrator for details.")));
+        } else if (all.isEmpty()) {
+            inv.setItem(22, item(Material.BOOK, "§e§lNo Achievements Configured",
+                    List.of("§7No achievement milestones are currently configured.")));
+        } else {
+            java.util.Set<String> completed = d.completedAchievements();
+            for (int index = start; index < end; index++) {
+                AchievementService.Achievement achievement = all.get(index);
+                boolean unlocked = completed.contains(achievement.id());
+                long current = service.progress(d, achievement);
+                long displayed = unlocked ? achievement.target() : current;
+                double ratio = achievement.target() <= 0 ? 0.0
+                        : Math.max(0.0, Math.min(1.0, (double) displayed / (double) achievement.target()));
+                Material material;
+                if (unlocked) material = Material.GOLD_BLOCK;
+                else if (achievement.job() != null) material = achievement.job().getMaterial();
+                else material = switch (achievement.metric()) {
+                    case ACTIVE_PROFESSIONS -> Material.LECTERN;
+                    case TOTAL_ACTIONS -> Material.ANVIL;
+                    case TOTAL_EARNINGS, JOB_EARNINGS -> Material.GOLD_INGOT;
+                    case JOB_LEVEL -> Material.EXPERIENCE_BOTTLE;
+                    case JOB_ACTIONS -> Material.WRITABLE_BOOK;
+                };
+                String status = unlocked ? "§a✓ UNLOCKED" : current > 0 ? "§e◈ IN PROGRESS" : "§8🔒 NOT YET EARNED";
+                String currentValue = achievement.metric() == AchievementService.Metric.JOB_EARNINGS
+                        || achievement.metric() == AchievementService.Metric.TOTAL_EARNINGS
+                        ? money(displayed) : number(displayed);
+                String targetValue = achievement.metric() == AchievementService.Metric.JOB_EARNINGS
+                        || achievement.metric() == AchievementService.Metric.TOTAL_EARNINGS
+                        ? money(achievement.target()) : number(achievement.target());
+                List<String> lore = new ArrayList<>();
+                lore.add("§7" + achievement.category());
+                lore.add(GuiTheme.divider());
+                lore.add("§7" + achievement.description());
+                lore.add("");
+                lore.add(status);
+                lore.add("§7Progress: §f" + currentValue + " §8/ §f" + targetValue);
+                lore.add(GuiTheme.progressBar(ratio, 9) + " §e" + GuiTheme.percent(ratio));
+                lore.add("");
+                lore.add(unlocked ? "§aRecorded in your imperial archive." : "§7Keep working to earn this honour.");
+                inv.setItem(ACHIEVEMENT_SLOTS[index - start],
+                        item(material, (unlocked ? "§6§l" : "§f§l") + achievement.title(), lore));
+            }
+        }
+        if (safePage > 0) inv.setItem(48, item(Material.ARROW, "§e§lPrevious Page", List.of("§7Browse previous honours.")));
+        inv.setItem(49, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to Aevum Imperium.")));
+        if (safePage + 1 < pages) inv.setItem(50, item(Material.ARROW, "§e§lNext Page", List.of("§7Browse more honours.")));
         inv.setItem(53, item(Material.BARRIER, "§c§lClose", List.of("§7Close the jobs interface.")));
         p.openInventory(inv);
     }
