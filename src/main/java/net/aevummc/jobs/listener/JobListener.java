@@ -93,7 +93,7 @@ public final class JobListener implements Listener {
         switch (h.menu()) {
             case MAIN -> {
                 if (slot == 4 || slot == 49) gui.openStats(p, data);
-                else if (slot == 48) p.performCommand("jobs help");
+                else if (slot == 48) gui.openAchievements(p, data, 0);
                 else if (slot == 50) gui.openManage(p, data);
                 else if (slot == 51) gui.openRewardOverview(p, data);
                 else if (slot == 52) gui.openLeaderboard(p, data);
@@ -215,6 +215,12 @@ public final class JobListener implements Listener {
             }
             case LEADERBOARD -> {
                 if (slot == 53) gui.openMain(p, data);
+            }
+            case ACHIEVEMENTS -> {
+                if (slot == 49) gui.openMain(p, data);
+                else if (slot == 53) p.closeInventory();
+                else if (slot == 48 && h.page() > 0) gui.openAchievements(p, data, h.page() - 1);
+                else if (slot == 50) gui.openAchievements(p, data, h.page() + 1);
             }
         }
     }
