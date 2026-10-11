@@ -95,6 +95,7 @@ public final class JobListener implements Listener {
                 if (slot == 4 || slot == 49) gui.openStats(p, data);
                 else if (slot == 48) p.performCommand("jobs help");
                 else if (slot == 50) gui.openManage(p, data);
+                else if (slot == 51) gui.openRewardOverview(p, data);
                 else if (slot == 52) gui.openLeaderboard(p, data);
                 else if (slot == 53) p.closeInventory();
                 else if (Arrays.stream(GuiManager.JOB_SLOTS).anyMatch(x -> x == slot)) {
@@ -183,16 +184,26 @@ public final class JobListener implements Listener {
             }
             case REWARDS -> {
                 JobType j = h.job();
-                if (j == null) break;
-                if (slot == 53) gui.openProgression(p, data, j);
-                else if (slot == 48 && h.page() > 0) gui.openRewards(p, data, j, h.page() - 1);
-                else if (slot == 50 && (h.page() + 1) * 45 < 50) gui.openRewards(p, data, j, h.page() + 1);
-                else if (slot == 49 && data.get(j).level() >= 50 && !data.get(j).level50Rewarded()) {
-                    if (plugin.getRewards().claimMaster(p, data, j)) {
-                        p.sendMessage("§6§lAevumJobs §7» §aMasterwork claimed successfully.");
-                        playGuiSound(p, Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.9f, 1.1f);
+                if (j == null) {
+                    // The overview has one card per implemented profession; selecting a card
+                    // opens that profession's detailed reward track.
+                    if (slot == 49) gui.openMain(p, data);
+                    else if (slot == 53) p.closeInventory();
+                    else if (Arrays.stream(GuiManager.JOB_SLOTS).anyMatch(x -> x == slot)) {
+                        int i = index(GuiManager.JOB_SLOTS, slot);
+                        if (i >= 0 && i < JobType.values().length) gui.openRewards(p, data, JobType.values()[i], 0);
                     }
-                    gui.openRewards(p, data, j, h.page());
+                } else {
+                    if (slot == 53) gui.openProgression(p, data, j);
+                    else if (slot == 48 && h.page() > 0) gui.openRewards(p, data, j, h.page() - 1);
+                    else if (slot == 50 && (h.page() + 1) * 45 < 50) gui.openRewards(p, data, j, h.page() + 1);
+                    else if (slot == 49 && data.get(j).level() >= 50 && !data.get(j).level50Rewarded()) {
+                        if (plugin.getRewards().claimMaster(p, data, j)) {
+                            p.sendMessage("§6§lAevumJobs §7» §aMasterwork claimed successfully.");
+                            playGuiSound(p, Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.9f, 1.1f);
+                        }
+                        gui.openRewards(p, data, j, h.page());
+                    }
                 }
             }
             case STATS -> {
