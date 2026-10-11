@@ -174,10 +174,16 @@ public final class GuiManager {
         for(int s:new int[]{0,1,2,3,5,6,7,8,9,17,18,26,27,35,36,44,45,48,51,52}) inv.setItem(s,item(Material.BLACK_STAINED_GLASS_PANE,"§8",List.of()));
     }
     private ItemStack item(Material mat,String name,List<String> lore){
-        ItemStack stack=new ItemStack(mat); ItemMeta meta=stack.getItemMeta();
-        meta.setDisplayName(org.bukkit.ChatColor.stripColor(name));
-        List<String> clean=new ArrayList<>(); for(String l:lore)clean.add(org.bukkit.ChatColor.stripColor(l));
-        meta.setLore(clean); stack.setItemMeta(meta); return stack;
+        ItemStack stack=new ItemStack(mat);
+        ItemMeta meta=stack.getItemMeta();
+        if(meta == null) return stack;
+
+        // Keep the legacy formatting codes. Stripping them here removed every
+        // colour from every GUI item, making the entire menu look unfinished.
+        meta.setDisplayName(name);
+        meta.setLore(new ArrayList<>(lore));
+        stack.setItemMeta(meta);
+        return stack;
     }
     private String title(String path,String fallback){return config.config().getString(path,fallback);}
     private String reqText(int level){return level>=50?"MAX":String.format("%,.0f XP",config.requiredXp(level));}
