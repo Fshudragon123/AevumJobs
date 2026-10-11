@@ -12,7 +12,7 @@ softdepend:
 commands:
   jobs:
     description: Open the AevumJobs system.
-    usage: /jobs [menu|stats|leaderboard|info|level|rewards|help|admin]
+    usage: /jobs [menu|stats|leaderboard|achievements|info|level|rewards|help|admin]
     aliases: [job, professions]
 permissions:
   aevumjobs.use:
