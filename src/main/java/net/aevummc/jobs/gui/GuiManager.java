@@ -424,7 +424,22 @@ public final class GuiManager {
     }
 
     private String title(String path, String fallback) {
-        return config.config().getString(path, fallback);
+        String configured = config.config().getString(path);
+        if (configured == null || configured.isBlank()) return fallback;
+
+        // Migrate the exact built-in titles from earlier AevumJobs defaults to
+        // the new theme, while preserving any server owner's custom title.
+        String legacyDefault = switch (path) {
+            case "gui.main-title" -> "🏛 A E V U M  •  J O B S";
+            case "gui.progress-title" -> "✦ Profession Progression";
+            case "gui.selection-title" -> "Choose Your Profession";
+            case "gui.manage-title" -> "Manage Your Professions";
+            case "gui.rewards-title" -> "Profession Rewards";
+            case "gui.stats-title" -> "AevumJobs Statistics";
+            case "gui.leaderboard-title" -> "AevumJobs Leaderboards";
+            default -> null;
+        };
+        return legacyDefault != null && legacyDefault.equals(configured) ? fallback : configured;
     }
 
     private String reqText(int level) {
