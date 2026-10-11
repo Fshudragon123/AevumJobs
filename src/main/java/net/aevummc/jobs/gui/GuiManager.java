@@ -141,7 +141,7 @@ public final class GuiManager {
                         "§7Level: §e" + jd.level(), "§7XP: §f" + number(Math.round(jd.xp())),
                         "§7Lifetime earnings: §a" + money(jd.totalEarned()))));
         inv.setItem(11, item(Material.RED_CONCRETE, "§c§lConfirm Departure",
-                List.of("§7Remove this profession from your active slots.", "§7Your saved levels and earnings remain.", "",
+                List.of("§7Remove this profession from your active slots.", config.preserveOnLeave() ? "§7Saved levels and earnings remain." : "§cSaved progression will be reset.", "",
                         "§cThis action changes active employment only.")));
         inv.setItem(13, item(Material.GRAY_CONCRETE, "§7§lKeep Profession",
                 List.of("§7Return without making changes.")));
