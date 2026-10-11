@@ -27,6 +27,7 @@ import java.util.UUID;
 public final class GuiManager {
     public enum Menu { MAIN, SELECT, MANAGE, CONFIRM, PROGRESSION, REWARDS, STATS, LEADERBOARD }
     public static final int[] JOB_SLOTS = {10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34};
+    public static final int[] STAT_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23};
 
     private final AevumJobs plugin;
     private final ConfigManager config;
@@ -265,7 +266,7 @@ public final class GuiManager {
                 List.of("§7THE IMPERIAL ARCHIVE", GuiTheme.divider(),
                         "§7Every statistic below comes from your saved job data.")));
 
-        int[] slots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23};
+        int[] slots = STAT_SLOTS;
         JobType[] all = JobType.values();
         for (int i = 0; i < all.length && i < slots.length; i++) {
             JobType j = all[i];
