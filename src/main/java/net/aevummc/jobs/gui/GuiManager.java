@@ -94,7 +94,7 @@ public final class GuiManager {
         inv.setItem(4, playerHead(p, "§6§lEmployment Register",
                 List.of("§7Your currently active professions.", GuiTheme.divider(),
                         "§7Slots used: §e" + d.activeCount() + "§8/§e" + config.activeLimit(),
-                        "§7Progress is preserved when leaving.")));
+                        config.preserveOnLeave() ? "§7Progress is preserved when leaving." : "§cProgress resets when leaving, by server configuration.")));
 
         int[] slots = {20, 21, 22};
         int i = 0;
@@ -137,7 +137,7 @@ public final class GuiManager {
                 "§8Leave §c" + j.getDisplayName() + "§8?");
         decorate(inv);
         inv.setItem(4, item(j.getMaterial(), "§c§lLeave " + j.getDisplayName(),
-                List.of("§7You are about to leave this profession.", "", "§7Your progression will be preserved.",
+                List.of("§7You are about to leave this profession.", "", config.preserveOnLeave() ? "§aProgression will be preserved." : "§cProgression will reset by server configuration.",
                         "§7Level: §e" + jd.level(), "§7XP: §f" + number(Math.round(jd.xp())),
                         "§7Lifetime earnings: §a" + money(jd.totalEarned()))));
         inv.setItem(11, item(Material.RED_CONCRETE, "§c§lConfirm Departure",
@@ -198,7 +198,7 @@ public final class GuiManager {
                         "§eClick to open rewards.")));
         if (d.isActive(j)) {
             inv.setItem(43, item(Material.RED_CONCRETE, "§c§lLeave Profession",
-                    List.of("§7Leave this active profession.", "§7Your progression is preserved.", "",
+                    List.of("§7Leave this active profession.", config.preserveOnLeave() ? "§7Saved progression will remain." : "§cSaved progression will be reset.", "",
                             "§eClick to review departure.")));
         } else {
             boolean full = d.activeCount() >= config.activeLimit();
@@ -221,7 +221,7 @@ public final class GuiManager {
         decorate(inv);
         inv.setItem(4, playerHead(p, "§6§lImperial Reward Chronicle",
                 List.of("§7One record for every profession.", GuiTheme.divider(),
-                        "§7Cash rewards are paid automatically on level-up.",
+                        "§7Cash pays on level-up when Vault economy is installed.",
                         "§7Level 50 unlocks a unique profession masterwork.",
                         "", "§eSelect a profession to inspect all 50 levels.")));
 
@@ -278,7 +278,7 @@ public final class GuiManager {
             lore.add(state);
             lore.add(GuiTheme.divider());
             lore.add("§7Cash reward: §a" + money(config.cashReward(level)));
-            lore.add(level == 50 ? "§7Master reward: §e" + masterName(j) : "§7Paid automatically on level-up");
+            lore.add(level == 50 ? "§7Master reward: §e" + masterName(j) : "§7Paid on level-up with Vault economy");
             if (!completed && !current && jd.level() < level) lore.add("§7Reach level §e" + level + " §7to progress.");
             inv.setItem(slot, item(material, (level == 50 ? "§6§l✦ " : "§6§l") + "Level " + level, lore));
         }
@@ -364,9 +364,9 @@ public final class GuiManager {
                             : Optional.ofNullable(Bukkit.getOfflinePlayer(entry.uuid()).getName())
                                     .orElse(entry.uuid().toString().substring(0, 8));
                     String medal = switch (rank) {
-                        case 1 -> "§6✦";
+                        case 1 -> "§e✦";
                         case 2 -> "§f◆";
-                        case 3 -> "§c◆";
+                        case 3 -> "§6◆";
                         default -> "§8" + rank + ".";
                     };
                     lore.add(medal + " §f" + name);
