@@ -101,7 +101,7 @@ public final class GuiManager {
         for(int level=start;level<=end;level++){
             String state=d.get(j).level()>level?"§a✓ Completed":d.get(j).level()==level?"§6★ Current":"§8🔒 Locked";
             String extra=level==50?"§e+ Master Reward":"§7Money only";
-            inv.setItem(9+(level-start),item(level==50?Material.NETHER_STAR:Material.GOLD_NUGGET,"§6§lLEVEL "+level,
+            inv.setItem(level-start,item(level==50?Material.NETHER_STAR:Material.GOLD_NUGGET,"§6§lLEVEL "+level,
                     List.of("§7Cash: §f"+money(config.cashReward(level)),extra,state)));
         }
         if(page>0) inv.setItem(48,item(Material.ARROW,"§ePrevious",List.of()));
