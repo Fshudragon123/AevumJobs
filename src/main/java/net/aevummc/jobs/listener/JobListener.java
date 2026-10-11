@@ -88,7 +88,7 @@ public final class JobListener implements Listener {
 
         PlayerJobs data = jobs.get(p.getUniqueId());
         if (data == null) return;
-        p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.45f, 1.25f);
+        playGuiSound(p, Sound.UI_BUTTON_CLICK, 0.45f, 1.25f);
 
         switch (h.menu()) {
             case MAIN -> {
@@ -121,7 +121,7 @@ public final class JobListener implements Listener {
                         jobs.join(data, j);
                         p.sendMessage(config.message("joined", "&6&lAevumJobs &7» &aProfession activated: &f{job}&a.")
                                 .replace("{job}", j.getDisplayName()).replace('&', '§'));
-                        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8f, 1.2f);
+                        playGuiSound(p, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8f, 1.2f);
                         gui.openProgression(p, data, j);
                     }
                 }
@@ -154,7 +154,7 @@ public final class JobListener implements Listener {
                     jobs.leave(data, j);
                     p.sendMessage(config.message("left", "&6&lAevumJobs &7» &eProfession left: &f{job}&e. Your progression is preserved.")
                             .replace("{job}", j.getDisplayName()).replace('&', '§'));
-                    p.playSound(p.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 0.7f, 1.2f);
+                    playGuiSound(p, Sound.BLOCK_IRON_DOOR_CLOSE, 0.7f, 1.2f);
                     gui.openManage(p, data);
                 } else if (slot == 13) {
                     gui.openManage(p, data);
@@ -190,7 +190,7 @@ public final class JobListener implements Listener {
                 else if (slot == 49 && data.get(j).level() >= 50 && !data.get(j).level50Rewarded()) {
                     if (plugin.getRewards().claimMaster(p, data, j)) {
                         p.sendMessage("§6§lAevumJobs §7» §aMasterwork claimed successfully.");
-                        p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.9f, 1.1f);
+                        playGuiSound(p, Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.9f, 1.1f);
                     }
                     gui.openRewards(p, data, j, h.page());
                 }
@@ -213,6 +213,12 @@ public final class JobListener implements Listener {
         if (!(e.getView().getTopInventory().getHolder() instanceof GuiManager.Holder)) return;
         int topSize = e.getView().getTopInventory().getSize();
         if (e.getRawSlots().stream().anyMatch(slot -> slot >= 0 && slot < topSize)) e.setCancelled(true);
+    }
+
+    private void playGuiSound(Player player, Sound sound, float volume, float pitch) {
+        if (config.config().getBoolean("gui.sounds.enabled", true)) {
+            player.playSound(player.getLocation(), sound, volume, pitch);
+        }
     }
 
     private int index(int[]a,int v){for(int i=0;i<a.length;i++)if(a[i]==v)return i;return -1;}
