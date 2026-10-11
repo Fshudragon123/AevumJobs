@@ -60,6 +60,8 @@ public final class GuiManager {
                 List.of("§7Your XP, earnings and profession levels.", "", "§eClick to inspect your record.")));
         inv.setItem(50, item(Material.LECTERN, "§6§lMy Professions",
                 List.of("§7Manage your active employment.", "§7Leave a profession or browse others.", "", "§eClick to manage.")));
+        inv.setItem(51, item(Material.CHEST, "§6§lReward Chronicle",
+                List.of("§7Your next reward in every profession.", "§7Inspect each profession's reward track.", "", "§eClick to view all rewards.")));
         inv.setItem(52, item(Material.GOLD_INGOT, "§6§lImperial Rankings",
                 List.of("§7The leading specialists of Aevum.", "", "§eClick to view the rankings.")));
         inv.setItem(53, item(Material.BARRIER, "§c§lClose",
@@ -205,6 +207,45 @@ public final class GuiManager {
                     List.of(full ? "§cNo active slots remain." : "§7Add " + j.getDisplayName() + " to your active professions.",
                             "§7Slots used: §e" + d.activeCount() + "§8/§e" + config.activeLimit(),
                             "", full ? "§7Leave a profession before joining." : "§eClick to activate.")));
+        }
+        inv.setItem(49, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to the main jobs screen.")));
+        inv.setItem(53, item(Material.BARRIER, "§c§lClose", List.of("§7Close the jobs interface.")));
+        p.openInventory(inv);
+    }
+
+    /** Overview of each profession's next real reward milestone. */
+    public void openRewardOverview(Player p, PlayerJobs d) {
+        Holder holder = new Holder(Menu.REWARDS, null, null, 0);
+        Inventory inv = Bukkit.createInventory(holder, 54,
+                title("gui.rewards-title", "§8⚜ §6Reward Chronicle"));
+        decorate(inv);
+        inv.setItem(4, playerHead(p, "§6§lImperial Reward Chronicle",
+                List.of("§7One record for every profession.", GuiTheme.divider(),
+                        "§7Cash rewards are paid automatically on level-up.",
+                        "§7Level 50 unlocks a unique profession masterwork.",
+                        "", "§eSelect a profession to inspect all 50 levels.")));
+
+        for (int i = 0; i < JobType.values().length && i < JOB_SLOTS.length; i++) {
+            JobType job = JobType.values()[i];
+            JobData jd = d.get(job);
+            boolean mastered = jd.level() >= 50;
+            int nextLevel = Math.min(50, jd.level() + 1);
+            List<String> lore = new ArrayList<>();
+            lore.add(d.isActive(job) ? "§a● ACTIVE PROFESSION" : "§8○ NOT ACTIVE");
+            lore.add(GuiTheme.divider());
+            lore.add("§7Current level: §e" + jd.level() + " §8/ §f50");
+            if (mastered) {
+                lore.add(jd.level50Rewarded() ? "§a✓ MASTERWORK CLAIMED" : "§e✦ MASTERWORK AVAILABLE");
+                lore.add("§7Masterwork: §e" + masterName(job));
+            } else {
+                lore.add("§7Next milestone: §eLevel " + nextLevel);
+                lore.add("§7Cash reward: §a" + money(config.cashReward(nextLevel)));
+                lore.add(GuiTheme.progressBar(progress(jd), 8) + " §e" + progressPct(jd));
+            }
+            lore.add("");
+            lore.add("§eClick to open this reward track.");
+            inv.setItem(JOB_SLOTS[i], item(mastered ? Material.NETHER_STAR : job.getMaterial(),
+                    "§6§l" + job.getDisplayName(), lore));
         }
         inv.setItem(49, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to the main jobs screen.")));
         inv.setItem(53, item(Material.BARRIER, "§c§lClose", List.of("§7Close the jobs interface.")));
