@@ -88,12 +88,16 @@ public final class JobListener implements Listener {
 
         PlayerJobs data = jobs.get(p.getUniqueId());
         if (data == null) return;
-        playGuiSound(p, Sound.UI_BUTTON_CLICK, 0.45f, 1.25f);
+        ItemStack clicked = e.getCurrentItem();
+        if (clicked == null || !clicked.getType().name().endsWith("_STAINED_GLASS_PANE")) {
+            playGuiSound(p, Sound.UI_BUTTON_CLICK, 0.45f, 1.25f);
+        }
 
         switch (h.menu()) {
             case MAIN -> {
-                if (slot == 4 || slot == 49) gui.openStats(p, data);
-                else if (slot == 48) gui.openAchievements(p, data, 0);
+                if (slot == 4 || slot == 39 || slot == 41 || slot == 49) gui.openStats(p, data);
+                else if (slot == 37) gui.openSelection(p, data);
+                else if (slot == 43 || slot == 48) gui.openAchievements(p, data, 0);
                 else if (slot == 50) gui.openManage(p, data);
                 else if (slot == 51) gui.openRewardOverview(p, data);
                 else if (slot == 52) gui.openLeaderboard(p, data);
@@ -196,7 +200,7 @@ public final class JobListener implements Listener {
                 } else {
                     if (slot == 53) gui.openProgression(p, data, j);
                     else if (slot == 48 && h.page() > 0) gui.openRewards(p, data, j, h.page() - 1);
-                    else if (slot == 50 && (h.page() + 1) * 45 < 50) gui.openRewards(p, data, j, h.page() + 1);
+                    else if (slot == 50 && (h.page() + 1) * GuiManager.REWARD_SLOTS.length < 50) gui.openRewards(p, data, j, h.page() + 1);
                     else if (slot == 49 && data.get(j).level() >= 50 && !data.get(j).level50Rewarded()) {
                         if (plugin.getRewards().claimMaster(p, data, j)) {
                             p.sendMessage("§6§lAevumJobs §7» §aMasterwork claimed successfully.");
