@@ -578,7 +578,7 @@ public final class GuiManager {
                         "§7Twelve disciplines. One lasting legacy.",
                         "§7Choose a profession below to open its dossier.",
                         "§7Master a craft. Build your name.", "",
-                        "§eFORGE YOUR LEGACY."), true));
+                        "§eClick to inspect your career record.", "§6FORGE YOUR LEGACY."), true));
         inv.setItem(14, item(Material.GOLD_INGOT, "§6§lIMPERIAL TREASURY",
                 List.of("§7Lifetime earnings §a" + money(totalEarned(d)),
                         "§7Actual job payouts recorded by AevumJobs.", "",
