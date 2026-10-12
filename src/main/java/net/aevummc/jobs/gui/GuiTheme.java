@@ -1,5 +1,7 @@
 package net.aevummc.jobs.gui;
 
+import net.aevummc.jobs.job.JobType;
+
 /**
  * Shared visual language for the Aevum Imperium inventory interfaces.
  * Uses legacy formatting codes and vanilla materials so no resource pack is required.
@@ -21,11 +23,46 @@ public final class GuiTheme {
         return "§8━━━━━━━━━━━━━━━━━━━━";
     }
 
+    /**
+     * Profession accents make the gallery memorable while shared typography and
+     * obsidian framing retain Aevum's coherent imperial visual identity.
+     */
+    public static String accent(JobType job) {
+        if (job == null) return GOLD;
+        return switch (job) {
+            case MINER -> "§e";
+            case FARMER -> "§a";
+            case LUMBERJACK -> "§2";
+            case FISHERMAN -> "§b";
+            case RANCHER -> "§6";
+            case WARRIOR -> "§c";
+            case HUNTER -> "§3";
+            case BUILDER -> "§7";
+            case ALCHEMIST -> "§5";
+            case ENCHANTER -> "§d";
+            case BLACKSMITH -> "§6";
+            case SCHOLAR -> "§9";
+        };
+    }
+
+    public static String professionTitle(JobType job) {
+        if (job == null) return GOLD + "§lIMPERIAL PROFESSION";
+        return accent(job) + "§l" + job.getIcon() + " " + job.getDisplayName().toUpperCase(java.util.Locale.ROOT);
+    }
+
     public static String progressBar(double progress, int width) {
+        return progressBarColour(GOLD, progress, width);
+    }
+
+    public static String progressBar(JobType job, double progress, int width) {
+        return progressBarColour(accent(job), progress, width);
+    }
+
+    private static String progressBarColour(String colour, double progress, int width) {
         int safeWidth = Math.max(1, Math.min(40, width));
         double ratio = Double.isFinite(progress) ? Math.max(0.0, Math.min(1.0, progress)) : 0.0;
         int filled = (int) Math.round(ratio * safeWidth);
-        return "§6" + "█".repeat(filled) + "§8" + "░".repeat(safeWidth - filled);
+        return colour + "█".repeat(filled) + "§8" + "░".repeat(safeWidth - filled);
     }
 
     public static String percent(double progress) {
