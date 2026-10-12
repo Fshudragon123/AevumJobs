@@ -12,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.event.*;
 import org.bukkit.event.block.*;
 import org.bukkit.event.inventory.BrewEvent;
