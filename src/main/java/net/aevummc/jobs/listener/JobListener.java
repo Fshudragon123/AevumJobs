@@ -130,18 +130,9 @@ public final class JobListener implements Listener {
                     int i = index(GuiManager.JOB_SLOTS, slot);
                     if (i < 0 || i >= JobType.values().length) break;
                     JobType j = JobType.values()[i];
-                    if (data.isActive(j)) gui.openProgression(p, data, j);
-                    else if (data.activeCount() >= config.activeLimit()) {
-                        p.sendMessage("§6§lAevumJobs §7» §cAll " + config.activeLimit()
-                                + " active profession slots are occupied. Leave one before joining another.");
-                        gui.openManage(p, data);
-                    } else {
-                        jobs.join(data, j);
-                        p.sendMessage(config.message("joined", "&6&lAevumJobs &7» &aProfession activated: &f{job}&a.")
-                                .replace("{job}", j.getDisplayName()).replace('&', '§'));
-                        playGuiSound(p, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8f, 1.2f);
-                        gui.openProgression(p, data, j);
-                    }
+                    // Selection is an inspection screen; employment changes are confirmed
+                    // from the profession dossier so one misclick never joins a job.
+                    gui.openProgression(p, data, j);
                 }
             }
             case MANAGE -> {
