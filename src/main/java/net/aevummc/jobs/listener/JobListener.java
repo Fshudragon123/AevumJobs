@@ -96,19 +96,31 @@ public final class JobListener implements Listener {
 
         switch (h.menu()) {
             case MAIN -> {
-                if (slot == 4 || slot == 39 || slot == 41 || slot == 49) gui.openStats(p, data);
-                else if (slot == 37) gui.openSelection(p, data);
-                else if (slot == 43 || slot == 48) gui.openAchievements(p, data, 0);
-                else if (slot == 50) gui.openManage(p, data);
-                else if (slot == 51) gui.openRewardOverview(p, data);
-                else if (slot == 52) gui.openLeaderboard(p, data);
-                else if (slot == 53) p.closeInventory();
-                else if (Arrays.stream(GuiManager.JOB_SLOTS).anyMatch(x -> x == slot)) {
-                    int i = index(GuiManager.JOB_SLOTS, slot);
+                if (slot == 4 || slot == 11 || slot == 12 || slot == 13 || slot == 14 || slot == 15 || slot == 49) {
+                    gui.openStats(p, data);
+                } else if (slot == 10 || slot == 50) {
+                    gui.openManage(p, data);
+                } else if (slot == 16 || slot == 48) {
+                    gui.openAchievements(p, data, 0);
+                } else if (slot == 51) {
+                    gui.openRewardOverview(p, data);
+                } else if (slot == 52) {
+                    gui.openLeaderboard(p, data);
+                } else if (slot == 53) {
+                    p.closeInventory();
+                } else if (Arrays.stream(GuiManager.MAIN_JOB_SLOTS).anyMatch(x -> x == slot)) {
+                    int i = index(GuiManager.MAIN_JOB_SLOTS, slot);
                     if (i >= 0 && i < JobType.values().length) gui.openProgression(p, data, JobType.values()[i]);
                 } else if (slot >= 45 && slot <= 47) {
-                    if (data.activeCount() < config.activeLimit()) gui.openSelection(p, data);
-                    else gui.openManage(p, data);
+                    List<JobType> active = new ArrayList<>(data.active());
+                    int activeIndex = slot - 45;
+                    if (activeIndex < active.size()) {
+                        gui.openProgression(p, data, active.get(activeIndex));
+                    } else if (data.activeCount() < config.activeLimit()) {
+                        gui.openSelection(p, data);
+                    } else {
+                        gui.openManage(p, data);
+                    }
                 }
             }
             case SELECT -> {
