@@ -30,6 +30,8 @@ public final class GuiManager {
     public static final int[] JOB_SLOTS = {10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34};
     public static final int[] STAT_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23};
     public static final int[] ACHIEVEMENT_SLOTS = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
+    /** Four tidy rows of seven reward cards, leaving the frame and controls untouched. */
+    public static final int[] REWARD_SLOTS = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
 
     private final AevumJobs plugin;
     private final ConfigManager config;
@@ -56,6 +58,7 @@ public final class GuiManager {
                         "§7Lifetime earnings: §a" + money(totalEarned(d)),
                         "", "§eYour record across Aevum.")));
         addJobCards(inv, d);
+        addCareerRibbon(inv, d);
         addActive(inv, d);
         inv.setItem(48, item(Material.NETHER_STAR, "§6§lAchievement Codex",
                 List.of("§7Your permanent career honours.", "§7Unlocked: §e" + d.completedAchievements().size()
@@ -106,7 +109,7 @@ public final class GuiManager {
         for (JobType j : d.active()) {
             if (i >= slots.length) break;
             JobData jd = d.get(j);
-            inv.setItem(slots[i++], item(j.getMaterial(), "§6§l" + j.getDisplayName(),
+            inv.setItem(slots[i++], item(j.getMaterial(), GuiTheme.professionTitle(j),
                     List.of("§7" + j.getDescription(), "", "§7Status: §aACTIVE",
                             "§7Level: §e" + jd.level() + " §8/ §f50",
                             "§7XP: §f" + number(Math.round(jd.xp())) + " §8/ §f" + reqText(jd.level()),
@@ -162,7 +165,7 @@ public final class GuiManager {
                 title("gui.progress-title", "§8⚜ §6Profession Dossier"));
         decorate(inv);
 
-        inv.setItem(4, item(j.getMaterial(), "§6§l" + j.getDisplayName(),
+        inv.setItem(4, item(j.getMaterial(), GuiTheme.professionTitle(j),
                 List.of("§7" + j.getDescription(), GuiTheme.divider(),
                         "§7Status: " + (d.isActive(j) ? "§aACTIVE" : "§8INACTIVE"),
                         "§7Lifetime earnings: §a" + money(jd.totalEarned()),
@@ -193,7 +196,7 @@ public final class GuiManager {
                 List.of("§7Current level: §e" + jd.level() + " §8/ §f50",
                         "§7Current XP: §f" + number(Math.round(jd.xp())),
                         "§7Next level: §f" + reqText(jd.level()),
-                        GuiTheme.progressBar(ratio, 18) + " §e" + progressPct(jd),
+                        GuiTheme.progressBar(j, ratio, 18) + " §e" + progressPct(jd),
                         "", "§7Total XP earned: §f" + number(jd.totalXp()),
                         "§7Actions completed: §f" + number(jd.actions()),
                         "§7Lifetime earnings: §a" + money(jd.totalEarned()))));
@@ -245,12 +248,12 @@ public final class GuiManager {
             } else {
                 lore.add("§7Next milestone: §eLevel " + nextLevel);
                 lore.add("§7Cash reward: §a" + money(config.cashReward(nextLevel)));
-                lore.add(GuiTheme.progressBar(progress(jd), 8) + " §e" + progressPct(jd));
+                lore.add(GuiTheme.progressBar(job, progress(jd), 8) + " §e" + progressPct(jd));
             }
             lore.add("");
             lore.add("§eClick to open this reward track.");
             inv.setItem(JOB_SLOTS[i], item(mastered ? Material.NETHER_STAR : job.getMaterial(),
-                    "§6§l" + job.getDisplayName(), lore));
+                    GuiTheme.professionTitle(job), lore));
         }
         inv.setItem(49, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to the main jobs screen.")));
         inv.setItem(53, item(Material.BARRIER, "§c§lClose", List.of("§7Close the jobs interface.")));
@@ -265,15 +268,15 @@ public final class GuiManager {
         if (j == null) return;
         int safePage = Math.max(0, Math.min(1, page));
         JobData jd = d.get(j);
-        int start = safePage * 45 + 1;
-        int end = Math.min(50, start + 44);
+        int start = safePage * REWARD_SLOTS.length + 1;
+        int end = Math.min(50, start + REWARD_SLOTS.length - 1);
         String menuTitle = title("gui.rewards-title", "§8⚜ §6Reward Chronicle");
         Inventory inv = Bukkit.createInventory(new Holder(Menu.REWARDS, j, null, safePage), 54,
-                menuTitle + " §8• §f" + (safePage + 1) + "/2");
+                menuTitle + " §8• §f" + start + "–" + end);
         decorate(inv);
 
         for (int level = start; level <= end; level++) {
-            int slot = safePage == 0 ? level - start : 20 + (level - start);
+            int slot = REWARD_SLOTS[level - start];
             boolean completed = jd.level() > level || (level == 50 && jd.level() == 50);
             boolean current = jd.level() == level && level != 50;
             String state = completed ? "§a✓ LEVEL REACHED" : current ? "§e★ CURRENT LEVEL" : "§8🔒 LOCKED";
@@ -288,8 +291,8 @@ public final class GuiManager {
             inv.setItem(slot, item(material, (level == 50 ? "§6§l✦ " : "§6§l") + "Level " + level, lore));
         }
 
-        if (safePage > 0) inv.setItem(48, item(Material.ARROW, "§e§lPrevious Page", List.of("§7Return to rewards 1–45.")));
-        if (end < 50) inv.setItem(50, item(Material.ARROW, "§e§lNext Page", List.of("§7Continue to rewards 46–50.")));
+        if (safePage > 0) inv.setItem(48, item(Material.ARROW, "§e§lPrevious Page", List.of("§7Return to levels 1–28.")));
+        if (end < 50) inv.setItem(50, item(Material.ARROW, "§e§lNext Page", List.of("§7Continue to levels 29–50.")));
         if (jd.level() >= 50 && !jd.level50Rewarded()) {
             inv.setItem(49, item(Material.NETHER_STAR, "§6§lClaim Masterwork",
                     List.of("§7Your level 50 reward is ready.", "§7Requires enough free inventory space.", "",
@@ -318,11 +321,11 @@ public final class GuiManager {
         for (int i = 0; i < all.length && i < slots.length; i++) {
             JobType j = all[i];
             JobData jd = d.get(j);
-            inv.setItem(slots[i], item(j.getMaterial(), "§6§l" + j.getDisplayName(),
+            inv.setItem(slots[i], item(j.getMaterial(), GuiTheme.professionTitle(j),
                     List.of(d.isActive(j) ? "§a● ACTIVE" : "§8○ INACTIVE",
                             "§7Level: §e" + jd.level() + " §8/ §f50",
                             "§7XP: §f" + number(Math.round(jd.xp())) + " §8/ §f" + reqText(jd.level()),
-                            GuiTheme.progressBar(progress(jd), 8) + " §e" + progressPct(jd),
+                            GuiTheme.progressBar(j, progress(jd), 8) + " §e" + progressPct(jd),
                             "§7Lifetime XP: §f" + number(jd.totalXp()),
                             "§7Actions: §f" + number(jd.actions()),
                             "§7Earned: §a" + money(jd.totalEarned()),
@@ -473,13 +476,35 @@ public final class GuiManager {
             lore.add(status);
             lore.add("§7Level: §e" + jd.level() + " §8/ §f50");
             lore.add("§7XP: §f" + number(Math.round(jd.xp())) + " §8/ §f" + reqText(jd.level()));
-            lore.add(GuiTheme.progressBar(progress(jd), 10) + " §e" + progressPct(jd));
+            lore.add(GuiTheme.progressBar(j, progress(jd), 10) + " §e" + progressPct(jd));
             lore.add("§7Lifetime XP: §f" + number(jd.totalXp()));
             lore.add("§7Earned: §a" + money(jd.totalEarned()));
             lore.add("");
             lore.add(active ? "§eClick to view your active dossier." : "§eClick to inspect this profession.");
-            inv.setItem(JOB_SLOTS[i], item(j.getMaterial(), "§6§l" + j.getDisplayName(), lore));
+            inv.setItem(JOB_SLOTS[i], item(j.getMaterial(), GuiTheme.professionTitle(j), lore));
         }
+    }
+
+    private void addCareerRibbon(Inventory inv, PlayerJobs d) {
+        // The rail is deliberately low-noise; only the four labelled tiles are actionable.
+        for (int slot = 36; slot <= 44; slot++) {
+            inv.setItem(slot, item(Material.BLACK_STAINED_GLASS_PANE, "§0", List.of()));
+        }
+        inv.setItem(37, item(Material.COMPASS, "§e§lThe Profession Hall",
+                List.of("§7Twelve paths. One imperial legacy.", "§7Browse, compare and choose your next discipline.", "",
+                        "§eClick to explore professions.")));
+        inv.setItem(39, item(Material.EXPERIENCE_BOTTLE, "§b§lCareer Experience",
+                List.of("§7Combined profession XP: §f" + number(totalXp(d)),
+                        "§7Across all twelve disciplines.", "",
+                        "§eClick to inspect Personal Records.")));
+        inv.setItem(41, item(Material.GOLD_INGOT, "§6§lImperial Treasury",
+                List.of("§7Lifetime job earnings: §a" + money(totalEarned(d)),
+                        "§7Your recorded career earnings.", "",
+                        "§eClick to inspect Personal Records.")));
+        inv.setItem(43, item(Material.NETHER_STAR, "§d§lHonours & Achievements",
+                List.of("§7Unlocked: §e" + d.completedAchievements().size() + " §8/ §f" + jobs.achievementService().all().size(),
+                        "§7Permanent honours earned through your career.", "",
+                        "§eClick to open the Achievement Codex.")));
     }
 
     private void addActive(Inventory inv, PlayerJobs d) {
@@ -490,7 +515,7 @@ public final class GuiManager {
             JobData jd = d.get(j);
             inv.setItem(slots[i++], item(j.getMaterial(), "§a§l" + j.getDisplayName(),
                     List.of("§aACTIVE EMPLOYMENT", "§7Level: §e" + jd.level() + " §8/ §f50",
-                            GuiTheme.progressBar(progress(jd), 8) + " §e" + progressPct(jd),
+                            GuiTheme.progressBar(j, progress(jd), 8) + " §e" + progressPct(jd),
                             "", "§eClick to browse or manage professions.")));
         }
         while (i < slots.length) {
