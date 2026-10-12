@@ -11,6 +11,7 @@ import net.aevummc.jobs.service.JobService;
 import net.aevummc.jobs.service.PlayerJobs;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -28,6 +29,8 @@ import java.util.UUID;
 public final class GuiManager {
     public enum Menu { MAIN, SELECT, MANAGE, CONFIRM, PROGRESSION, REWARDS, STATS, LEADERBOARD, ACHIEVEMENTS }
     public static final int[] JOB_SLOTS = {10, 12, 14, 16, 19, 21, 23, 25, 28, 30, 32, 34};
+    /** A spacious four-column gallery used only by the flagship hub. */
+    public static final int[] MAIN_JOB_SLOTS = {19, 21, 23, 25, 28, 30, 32, 34, 37, 39, 41, 43};
     public static final int[] STAT_SLOTS = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23};
     public static final int[] ACHIEVEMENT_SLOTS = {10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
     /** Four tidy rows of seven reward cards, leaving the frame and controls untouched. */
@@ -57,7 +60,8 @@ public final class GuiManager {
                         "§7Combined job levels: §e" + combinedLevels(d),
                         "§7Lifetime earnings: §a" + money(totalEarned(d)),
                         "", "§eYour record across Aevum.")));
-        addJobCards(inv, d);
+        addGalleryGutters(inv);
+        addJobCards(inv, d, MAIN_JOB_SLOTS);
         addCareerRibbon(inv, d);
         addActive(inv, d);
         inv.setItem(48, item(Material.NETHER_STAR, "§6§lAchievement Codex",
@@ -463,48 +467,93 @@ public final class GuiManager {
         inv.setItem(53, item(Material.ARROW, "§e§lBack to the Hub", List.of("§7Return to the main jobs screen.")));
     }
 
+    /** Classic compact gallery remains available on the selection screen. */
     private void addJobCards(Inventory inv, PlayerJobs d) {
+        addJobCards(inv, d, JOB_SLOTS);
+    }
+
+    /** Distinctive profession cards with a unique accent, live progression and state. */
+    private void addJobCards(Inventory inv, PlayerJobs d, int[] slots) {
         JobType[] all = JobType.values();
-        for (int i = 0; i < all.length && i < JOB_SLOTS.length; i++) {
-            JobType j = all[i];
-            JobData jd = d.get(j);
-            boolean active = d.isActive(j);
-            String status = active ? "§a● ACTIVE PROFESSION" : "§8○ NOT ACTIVE";
+        for (int i = 0; i < all.length && i < slots.length; i++) {
+            JobType job = all[i];
+            JobData data = d.get(job);
+            boolean active = d.isActive(job);
+            boolean mastered = data.level() >= 50;
+            Material icon = mastered ? Material.NETHER_STAR : job.getMaterial();
+
             List<String> lore = new ArrayList<>();
-            lore.add("§7" + j.getDescription());
+            lore.add("§8THE IMPERIAL GUILD");
+            lore.add("§7" + job.getDescription());
             lore.add(GuiTheme.divider());
-            lore.add(status);
-            lore.add("§7Level: §e" + jd.level() + " §8/ §f50");
-            lore.add("§7XP: §f" + number(Math.round(jd.xp())) + " §8/ §f" + reqText(jd.level()));
-            lore.add(GuiTheme.progressBar(j, progress(jd), 10) + " §e" + progressPct(jd));
-            lore.add("§7Lifetime XP: §f" + number(jd.totalXp()));
-            lore.add("§7Earned: §a" + money(jd.totalEarned()));
+            lore.add(active ? "§a● CURRENTLY EMPLOYED" : mastered ? "§6✦ PROFESSION MASTERED" : "§8○ AVAILABLE DISCIPLINE");
+            lore.add("§7PROFESSION LEVEL §f" + data.level() + " §8/ §f50");
+            if (mastered) {
+                lore.add("§6✦ Masterwork threshold achieved");
+                lore.add("§7Masterwork: §e" + masterName(job));
+                lore.add(GuiTheme.progressBar(job, 1.0, 8) + " §6100%");
+            } else {
+                lore.add("§7XP: §f" + number(Math.round(data.xp())) + " §8/ §f" + reqText(data.level()));
+                lore.add(GuiTheme.progressBar(job, progress(data), 8) + " §e" + progressPct(data));
+                lore.add("§7Next level: §e" + (data.level() + 1) + " §8• §a" + money(config.cashReward(data.level() + 1)));
+            }
+            lore.add("§7Lifetime earnings: §a" + money(data.totalEarned()));
+            lore.add("§7Recorded actions: §f" + number(data.actions()));
             lore.add("");
-            lore.add(active ? "§eClick to view your active dossier." : "§eClick to inspect this profession.");
-            inv.setItem(JOB_SLOTS[i], item(j.getMaterial(), GuiTheme.professionTitle(j), lore));
+            lore.add(active ? "§e▶ Inspect your active dossier" : "§e▶ Inspect discipline");
+            lore.add(active || mastered ? "§8Imperial record verified" : "§8Progress is tracked from real actions");
+
+            String display = (active ? "§a● " : mastered ? "§6✦ " : "") + GuiTheme.professionTitle(job);
+            inv.setItem(slots[i], item(icon, display, lore, active || mastered));
         }
     }
 
-    private void addCareerRibbon(Inventory inv, PlayerJobs d) {
-        // The rail is deliberately low-noise; only the four labelled tiles are actionable.
-        for (int slot = 36; slot <= 44; slot++) {
-            inv.setItem(slot, item(Material.BLACK_STAINED_GLASS_PANE, "§0", List.of()));
+    /** Gutter panes separate the profession cards like a deliberately composed gallery. */
+    private void addGalleryGutters(Inventory inv) {
+        int[] gutters = {20, 22, 24, 29, 31, 33, 38, 40, 42};
+        for (int slot : gutters) {
+            int row = slot / 9;
+            Material material = (slot % 9 == 4 || row == 2 && slot == 22 || row == 3 && slot == 31 || row == 4 && slot == 40)
+                    ? Material.BROWN_STAINED_GLASS_PANE : Material.BLACK_STAINED_GLASS_PANE;
+            inv.setItem(slot, item(material, "§0", List.of()));
         }
-        inv.setItem(37, item(Material.COMPASS, "§e§lThe Profession Hall",
-                List.of("§7Twelve paths. One imperial legacy.", "§7Browse, compare and choose your next discipline.", "",
-                        "§eClick to explore professions.")));
-        inv.setItem(39, item(Material.EXPERIENCE_BOTTLE, "§b§lCareer Experience",
-                List.of("§7Combined profession XP: §f" + number(totalXp(d)),
-                        "§7Across all twelve disciplines.", "",
+    }
+
+    /** The career dashboard is the visual centrepiece of the jobs hub. */
+    private void addCareerRibbon(Inventory inv, PlayerJobs d) {
+        int mastered = 0;
+        for (JobType job : JobType.values()) if (d.get(job).level() >= 50) mastered++;
+
+        inv.setItem(10, item(Material.LECTERN, "§6§lEMPLOYMENT",
+                List.of("§7Active professions §f" + d.activeCount() + " §8/ §f" + config.activeLimit(),
+                        "§7Available slots §a" + Math.max(0, config.activeLimit() - d.activeCount()),
+                        "", "§eClick to manage employment.")));
+        inv.setItem(11, item(Material.EXPERIENCE_BOTTLE, "§b§lCAREER LEVELS",
+                List.of("§7Combined levels §f" + combinedLevels(d) + " §8/ §f600",
+                        "§7Every profession contributes to this record.", "",
                         "§eClick to inspect Personal Records.")));
-        inv.setItem(41, item(Material.GOLD_INGOT, "§6§lImperial Treasury",
-                List.of("§7Lifetime job earnings: §a" + money(totalEarned(d)),
-                        "§7Your recorded career earnings.", "",
+        inv.setItem(12, item(Material.AMETHYST_SHARD, "§d§lCAREER EXPERIENCE",
+                List.of("§7Total profession XP §f" + number(totalXp(d)),
+                        "§7Experience accumulated across your disciplines.", "",
                         "§eClick to inspect Personal Records.")));
-        inv.setItem(43, item(Material.NETHER_STAR, "§d§lHonours & Achievements",
-                List.of("§7Unlocked: §e" + d.completedAchievements().size() + " §8/ §f" + jobs.achievementService().all().size(),
-                        "§7Permanent honours earned through your career.", "",
-                        "§eClick to open the Achievement Codex.")));
+        inv.setItem(13, item(Material.NETHER_STAR, "§6§lTHE IMPERIUM",
+                List.of("§8A E V U M   •   CAREER DOSSIER", GuiTheme.divider(),
+                        "§7Twelve disciplines. One lasting legacy.",
+                        "§7Choose a profession below to open its dossier.",
+                        "§7Master a craft. Build your name.", "",
+                        "§eFORGE YOUR LEGACY."), true));
+        inv.setItem(14, item(Material.GOLD_INGOT, "§6§lIMPERIAL TREASURY",
+                List.of("§7Lifetime earnings §a" + money(totalEarned(d)),
+                        "§7Actual job payouts recorded by AevumJobs.", "",
+                        "§eClick to inspect Personal Records.")));
+        inv.setItem(15, item(Material.DIAMOND, "§b§lMASTERED DISCIPLINES",
+                List.of("§7Professions mastered §f" + mastered + " §8/ §f" + JobType.values().length,
+                        mastered == JobType.values().length ? "§6✦ Every discipline mastered" : "§7Reach level 50 to master a profession.", "",
+                        "§eClick to inspect your career."), mastered > 0));
+        inv.setItem(16, item(Material.WRITABLE_BOOK, "§d§lHONOURS",
+                List.of("§7Achievements unlocked §f" + d.completedAchievements().size() + " §8/ §f" + jobs.achievementService().all().size(),
+                        "§7Permanent honours earned through real career progress.", "",
+                        "§eClick to open the Achievement Codex."), !d.completedAchievements().isEmpty()));
     }
 
     private void addActive(Inventory inv, PlayerJobs d) {
@@ -513,10 +562,10 @@ public final class GuiManager {
         for (JobType j : d.active()) {
             if (i >= slots.length) break;
             JobData jd = d.get(j);
-            inv.setItem(slots[i++], item(j.getMaterial(), GuiTheme.professionTitle(j),
+            inv.setItem(slots[i++], item(j.getMaterial(), "§a● " + GuiTheme.professionTitle(j),
                     List.of("§aACTIVE EMPLOYMENT", "§7Level: §e" + jd.level() + " §8/ §f50",
                             GuiTheme.progressBar(j, progress(jd), 8) + " §e" + progressPct(jd),
-                            "", "§eClick to browse or manage professions.")));
+                            "", "§eClick to open this profession dossier."), true));
         }
         while (i < slots.length) {
             inv.setItem(slots[i++], item(Material.GRAY_STAINED_GLASS_PANE, "§8§lEmpty Employment Slot",
@@ -554,6 +603,11 @@ public final class GuiManager {
     }
 
     private ItemStack item(Material material, String name, List<String> lore) {
+        return item(material, name, lore, false);
+    }
+
+    /** Adds a controlled vanilla enchantment glint for meaningful high-status items. */
+    private ItemStack item(Material material, String name, List<String> lore, boolean glint) {
         ItemStack stack = new ItemStack(material == null ? Material.PAPER : material);
         ItemMeta meta = stack.getItemMeta();
         if (meta == null) return stack;
@@ -562,6 +616,10 @@ public final class GuiManager {
         meta.setDisplayName(name);
         meta.setLore(new ArrayList<>(lore));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        if (glint) {
+            meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
         stack.setItemMeta(meta);
         return stack;
     }
