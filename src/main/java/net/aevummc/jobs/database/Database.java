@@ -41,6 +41,8 @@ public final class Database {
         try (Statement st = c.createStatement()) {
             st.executeUpdate("CREATE TABLE IF NOT EXISTS player_jobs (uuid TEXT NOT NULL, job TEXT NOT NULL, level INTEGER NOT NULL DEFAULT 0, xp REAL NOT NULL DEFAULT 0, total_xp INTEGER NOT NULL DEFAULT 0, total_earned REAL NOT NULL DEFAULT 0, actions INTEGER NOT NULL DEFAULT 0, active INTEGER NOT NULL DEFAULT 0, reward50 INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(uuid,job))");
             st.executeUpdate("CREATE TABLE IF NOT EXISTS reward_journal (id TEXT PRIMARY KEY, uuid TEXT NOT NULL, job TEXT NOT NULL, level INTEGER NOT NULL, amount REAL NOT NULL, status TEXT NOT NULL, created_at INTEGER NOT NULL)");
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS player_achievements (uuid TEXT NOT NULL, achievement_id TEXT NOT NULL, completed_at INTEGER NOT NULL, PRIMARY KEY(uuid,achievement_id))");
+            st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_achievements_uuid ON player_achievements(uuid, completed_at)");
             st.executeUpdate("CREATE TABLE IF NOT EXISTS pvp_kills (killer TEXT NOT NULL, victim TEXT NOT NULL, last_kill INTEGER NOT NULL, kill_count INTEGER NOT NULL DEFAULT 1, PRIMARY KEY(killer,victim))");
             st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_jobs_leaderboard ON player_jobs(job, level DESC, total_xp DESC)");
         }
@@ -49,24 +51,36 @@ public final class Database {
     public CompletableFuture<PlayerJobs> load(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
             PlayerJobs data = new PlayerJobs(uuid);
-            try (Connection c=open(); PreparedStatement ps=c.prepareStatement("SELECT * FROM player_jobs WHERE uuid=?")) {
-                ps.setString(1, uuid.toString());
-                try (ResultSet rs=ps.executeQuery()) {
-                    while(rs.next()){
-                        JobType type=JobType.fromString(rs.getString("job")); if(type==null)continue;
-                        JobData d=data.get(type);
-                        d.setLevel(rs.getInt("level"));
-                        d.setXp(rs.getDouble("xp"));
-                        d.setTotalXp(rs.getLong("total_xp"));
-                        d.setTotalEarned(rs.getDouble("total_earned"));
-                        d.setActions(rs.getLong("actions"));
-                        d.setLevel50Rewarded(rs.getInt("reward50")!=0);
-                        if(rs.getInt("active")!=0)data.activate(type,Integer.MAX_VALUE);
+            try (Connection c = open()) {
+                try (PreparedStatement ps = c.prepareStatement("SELECT * FROM player_jobs WHERE uuid=?")) {
+                    ps.setString(1, uuid.toString());
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            JobType type = JobType.fromString(rs.getString("job"));
+                            if (type == null) continue;
+                            JobData d = data.get(type);
+                            d.setLevel(rs.getInt("level"));
+                            d.setXp(rs.getDouble("xp"));
+                            d.setTotalXp(rs.getLong("total_xp"));
+                            d.setTotalEarned(rs.getDouble("total_earned"));
+                            d.setActions(rs.getLong("actions"));
+                            d.setLevel50Rewarded(rs.getInt("reward50") != 0);
+                            if (rs.getInt("active") != 0) data.activate(type, Integer.MAX_VALUE);
+                        }
                     }
                 }
-            }catch(SQLException e){plugin.getLogger().severe("Could not load jobs for "+uuid+": "+e.getMessage());}
+                try (PreparedStatement ps = c.prepareStatement(
+                        "SELECT achievement_id FROM player_achievements WHERE uuid=?")) {
+                    ps.setString(1, uuid.toString());
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) data.completeAchievement(rs.getString("achievement_id"));
+                    }
+                }
+            } catch (SQLException e) {
+                plugin.getLogger().severe("Could not load jobs for " + uuid + ": " + e.getMessage());
+            }
             return data;
-        },executor);
+        }, executor);
     }
 
     public CompletableFuture<Void> save(PlayerJobs data) {
@@ -82,6 +96,29 @@ public final class Database {
                 c.commit();
             }catch(SQLException e){plugin.getLogger().severe("Could not save jobs for "+data.uuid()+": "+e.getMessage());}
         },executor);
+    }
+
+    /** Persists permanent achievement completions idempotently without rewriting job rows. */
+    public CompletableFuture<Void> saveAchievements(PlayerJobs data) {
+        UUID uuid = data.uuid();
+        Set<String> completed = data.completedAchievements();
+        if (completed.isEmpty()) return CompletableFuture.completedFuture(null);
+        long completedAt = System.currentTimeMillis();
+        return CompletableFuture.runAsync(() -> {
+            try (Connection c = open();
+                 PreparedStatement ps = c.prepareStatement(
+                         "INSERT OR IGNORE INTO player_achievements(uuid,achievement_id,completed_at) VALUES(?,?,?)")) {
+                for (String achievementId : completed) {
+                    ps.setString(1, uuid.toString());
+                    ps.setString(2, achievementId);
+                    ps.setLong(3, completedAt);
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            } catch (SQLException e) {
+                plugin.getLogger().warning("Could not save achievements for " + uuid + ": " + e.getMessage());
+            }
+        }, executor);
     }
 
     public CompletableFuture<Void> recordPvpKill(UUID killer, UUID victim, long timestamp) {

@@ -21,6 +21,7 @@ public final class JobsCommand implements CommandExecutor {
             case "help"->help(s);
             case "stats"->playerMenu(s,gui::openStats);
             case "leaderboard","top"->playerMenu(s,gui::openLeaderboard);
+            case "achievements","achievement"->playerMenu(s,(p,d)->gui.openAchievements(p,d,0));
             case "info","level","rewards"->{if(a.length<2){s.sendMessage("§cUsage: /jobs "+a[0]+" <job>");return true;}JobType j=JobType.fromString(a[1]);if(j==null){s.sendMessage("§cUnknown profession. Use /jobs help.");return true;}playerMenu(s,(p,d)->{if(a[0].equalsIgnoreCase("rewards"))gui.openRewards(p,d,j,0);else gui.openProgression(p,d,j);});}
             case "admin"->admin(s,a);
             default->help(s);
@@ -30,7 +31,7 @@ public final class JobsCommand implements CommandExecutor {
     private void admin(CommandSender s,String[] a){
         if(!s.hasPermission("aevumjobs.admin")){s.sendMessage("§cNo permission.");return;}if(a.length<2){help(s);return;}
         switch(a[1].toLowerCase()){
-            case "reload"->{if(!s.hasPermission("aevumjobs.admin.reload")){s.sendMessage("§cNo permission.");return;}config.reload();s.sendMessage("§6§lAevumJobs §7» §aConfiguration reloaded safely.");}
+            case "reload"->{if(!s.hasPermission("aevumjobs.admin.reload")){s.sendMessage("§cNo permission.");return;}config.reload();jobs.reloadAchievements();s.sendMessage("§6§lAevumJobs §7» §aConfiguration reloaded safely.");}
             case "setlevel","addxp","removexp","reset"->{
                 String node="aevumjobs.admin."+a[1].toLowerCase();if(!s.hasPermission(node)){s.sendMessage("§cNo permission.");return;}
                 int needed=a[1].equalsIgnoreCase("reset")?4:5;if(a.length<needed){s.sendMessage("§cInvalid arguments.");return;}
@@ -43,5 +44,5 @@ public final class JobsCommand implements CommandExecutor {
             default->help(s);
         }
     }
-    private void help(CommandSender s){s.sendMessage("§6§l══════════ AEVUMJOBS ══════════");s.sendMessage("§e/jobs §7Open professions");s.sendMessage("§e/jobs stats §7View statistics");s.sendMessage("§e/jobs leaderboard §7View leaderboards");s.sendMessage("§e/jobs info <job> §7View profession");s.sendMessage("§e/jobs level <job> §7View progression");s.sendMessage("§e/jobs rewards <job> §7View rewards");s.sendMessage("§e/jobs help §7Show this help");if(s.hasPermission("aevumjobs.admin")){s.sendMessage("§6/jobs admin setlevel <player> <job> <level>");s.sendMessage("§6/jobs admin addxp <player> <job> <amount>");s.sendMessage("§6/jobs admin removexp <player> <job> <amount>");s.sendMessage("§6/jobs admin reset <player> <job>");s.sendMessage("§6/jobs admin reload");}s.sendMessage("§6§l═══════════════════════════════");}
+    private void help(CommandSender s){s.sendMessage("§6§l══════════ AEVUMJOBS ══════════");s.sendMessage("§e/jobs §7Open professions");s.sendMessage("§e/jobs achievements §7View your achievement codex");s.sendMessage("§e/jobs stats §7View statistics");s.sendMessage("§e/jobs leaderboard §7View leaderboards");s.sendMessage("§e/jobs info <job> §7View profession");s.sendMessage("§e/jobs level <job> §7View progression");s.sendMessage("§e/jobs rewards <job> §7View rewards");s.sendMessage("§e/jobs help §7Show this help");if(s.hasPermission("aevumjobs.admin")){s.sendMessage("§6/jobs admin setlevel <player> <job> <level>");s.sendMessage("§6/jobs admin addxp <player> <job> <amount>");s.sendMessage("§6/jobs admin removexp <player> <job> <amount>");s.sendMessage("§6/jobs admin reset <player> <job>");s.sendMessage("§6/jobs admin reload");}s.sendMessage("§6§l═══════════════════════════════");}
 }

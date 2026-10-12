@@ -63,6 +63,17 @@ cash-rewards:
 leaderboards:
   cache-seconds: 60
 
+# Achievement milestones are prestige-only; they do not inject additional currency.
+# Completed achievements are stored in SQLite and remain unlocked permanently.
+achievements:
+  enabled: true
+  notifications: true
+  level-milestones: [10, 25, 50]
+  action-milestones: [100, 1000, 5000]
+  earnings-milestones: [10000, 50000]
+  total-action-milestones: [1000, 10000]
+  total-earnings-milestones: [100000, 1000000]
+
 anti-abuse:
   builder:
     placement-cooldown-ms: 30000
@@ -235,13 +246,17 @@ master-rewards:
     enchants: []
 
 gui:
-  main-title: "🏛 A E V U M  •  J O B S"
-  progress-title: "✦ Profession Progression"
-  selection-title: "Choose Your Profession"
-  manage-title: "Manage Your Professions"
-  rewards-title: "Profession Rewards"
-  stats-title: "AevumJobs Statistics"
-  leaderboard-title: "AevumJobs Leaderboards"
+  # Aevum Imperium — dark obsidian and restrained imperial gold.
+  main-title: "§8⚜ §6Aevum Imperium §8• §fJobs"
+  progress-title: "§8⚜ §6Profession Dossier"
+  selection-title: "§8⚜ §6Choose a Profession"
+  manage-title: "§8⚜ §6My Professions"
+  rewards-title: "§8⚜ §6Reward Chronicle"
+  stats-title: "§8⚜ §6Personal Records"
+  leaderboard-title: "§8⚜ §6Imperial Rankings"
+  achievements-title: "§8⚜ §6Achievement Codex"
+  sounds:
+    enabled: true
 
 messages:
   joined: "&6&lAevumJobs &7» &a✓ Profession activated: &f{job}&a."

@@ -17,6 +17,7 @@ AevumJobs is the flagship AevumMC profession and progression system for Paper 26
 - Hunter filters for NPC/fake/plugin-marked entities and configured invalid entity types.
 - Placement tracking to reduce block place/break XP loops.
 - Premium six-row dark/bronze/gold GUI flow.
+- Paginated achievement codex with configurable career and profession milestones, SQLite-persisted completions, and optional unlock notifications.
 - Player and admin commands with permission nodes.
 - GitHub Actions build pipeline that produces an installable jar artifact.
 
@@ -35,6 +36,7 @@ The repository contains a GitHub Actions workflow under .github/workflows/build.
 - /jobs menu
 - /jobs stats
 - /jobs leaderboard
+- /jobs achievements
 - /jobs info <job>
 - /jobs level <job>
 - /jobs rewards <job>
@@ -83,6 +85,9 @@ Alchemist: successful brewing events attributed to the last player to open the b
 Enchanter: successful enchanting.
 Blacksmith: equipment crafting, anvil repair and smithing result collection.
 Scholar: signed books and cartography result collection.
+
+## Achievements
+The Achievement Codex tracks configurable profession level, XP-eligible action, profession earnings, career action, and career earnings milestones. Completions are persisted in a dedicated SQLite table and remain unlocked if a player leaves a job or its progression is later reset. Achievements are prestige-only and add no cash rewards. Use `/jobs achievements` or the star in the jobs hub. Achievement tracking uses the same accepted job-action events as XP tracking; it does not fabricate historical actions.
 
 ## Database
 Player progression is stored in SQLite, not YAML. The schema includes per-profession level, current XP, lifetime XP, total earned, action count, active state, Level 50 reward state, and a reward journal table reserved for payout transaction auditing.
