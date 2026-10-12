@@ -47,7 +47,7 @@ public final class GuiTheme {
 
     public static String professionTitle(JobType job) {
         if (job == null) return GOLD + "§lIMPERIAL PROFESSION";
-        return accent(job) + "§l" + job.getIcon() + " " + job.getDisplayName().toUpperCase(java.util.Locale.ROOT);
+        return accent(job) + "§l" + job.getDisplayName().toUpperCase(java.util.Locale.ROOT);
     }
 
     public static String progressBar(double progress, int width) {
