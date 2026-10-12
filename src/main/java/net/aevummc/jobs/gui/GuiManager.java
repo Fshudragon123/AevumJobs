@@ -169,19 +169,22 @@ public final class GuiManager {
                 title("gui.progress-title", "§8⚜ §6Profession Dossier"));
         decorate(inv);
 
-        inv.setItem(4, item(j.getMaterial(), GuiTheme.professionTitle(j),
-                List.of("§7" + j.getDescription(), GuiTheme.divider(),
-                        "§7Status: " + (d.isActive(j) ? "§aACTIVE" : "§8INACTIVE"),
+        inv.setItem(4, item(jd.level() >= 50 ? Material.NETHER_STAR : j.getMaterial(), GuiTheme.professionTitle(j),
+                List.of("§8IMPERIAL DISCIPLINE FILE", "§7" + j.getDescription(), GuiTheme.divider(),
+                        "§7Employment: " + (d.isActive(j) ? "§aACTIVE" : "§8INACTIVE"),
                         "§7Lifetime earnings: §a" + money(jd.totalEarned()),
-                        "§7Actions completed: §f" + number(jd.actions()))));
+                        "§7Actions completed: §f" + number(jd.actions()),
+                        jd.level() >= 50 ? "§6✦ MASTERY CONFIRMED" : "§7Mastery threshold: §eLevel 50"), jd.level() >= 50));
 
         int[] milestoneSlots = {11, 15, 20, 24, 29, 33};
         int[] levels = {1, 10, 20, 30, 40, 50};
+        int milestonesReached = 0;
         for (int i = 0; i < levels.length; i++) {
             int level = levels[i];
             boolean completed = jd.level() > level || (level == 50 && jd.level() == 50);
             boolean current = jd.level() == level && level != 50;
-            String status = completed ? "§a✓ MILESTONE REACHED" : current ? "§e★ CURRENT LEVEL" : "§8🔒 FUTURE MILESTONE";
+            if (completed || current) milestonesReached++;
+            String status = completed ? "§a✓ MILESTONE REACHED" : current ? "§e★ CURRENT LEVEL" : "§8LOCKED • FUTURE HONOUR";
             Material icon = completed ? Material.GOLD_BLOCK : current ? Material.GOLD_INGOT : Material.IRON_BLOCK;
             List<String> lore = new ArrayList<>();
             lore.add(status);
@@ -190,8 +193,33 @@ public final class GuiManager {
             if (level == 50) lore.add("§7Masterwork: §e" + masterName(j));
             else lore.add("§7Milestone level: §f" + level);
             lore.add("");
-            lore.add(completed ? "§aYour record has passed this level." : "§7Continue earning XP to reach it.");
-            inv.setItem(milestoneSlots[i], item(icon, "§6§lLevel " + level, lore));
+            lore.add(completed ? "§aRecorded in your imperial career." : current ? "§eYou are standing at this milestone." : "§7Continue earning XP to reach it.");
+            inv.setItem(milestoneSlots[i], item(icon, (level == 50 ? "§6§l✦ " : "§6§l") + "Level " + level, lore, level == 50 && completed));
+        }
+
+        String nextMilestone = jd.level() >= 50 ? "MASTERY COMPLETE" : "LEVEL " + java.util.Arrays.stream(levels).filter(level -> level > jd.level()).findFirst().orElse(50);
+        inv.setItem(13, item(Material.BOOK, GuiTheme.accent(j) + "§lTHE PATH TO MASTERY",
+                List.of("§8PROGRESSION REGISTER", GuiTheme.divider(),
+                        "§7Milestones secured §f" + milestonesReached + " §8/ §f" + levels.length,
+                        "§7Next honour §e" + nextMilestone,
+                        "§7Milestone path §f1 · 10 · 20 · 30 · 40 · 50",
+                        "", jd.level() >= 50 ? "§6✦ Your discipline is fully mastered." : "§7Every milestone carries its configured cash reward.")));
+
+        if (jd.level() >= 50) {
+            inv.setItem(22, item(Material.NETHER_STAR, "§6§lMASTER OF THE DISCIPLINE",
+                    List.of("§6✦ LEVEL 50 ACHIEVED", GuiTheme.divider(),
+                            "§7Masterwork §e" + masterName(j),
+                            jd.level50Rewarded() ? "§aMasterwork already claimed" : "§eMasterwork still available to claim",
+                            "", "§7Your progression remains recorded permanently."), true));
+        } else {
+            double needed = Math.max(0.0, config.requiredXp(jd.level()) - jd.xp());
+            int nextLevel = Math.min(50, jd.level() + 1);
+            inv.setItem(22, item(Material.COMPASS, "§e§lNEXT IMPERIAL OBJECTIVE",
+                    List.of("§7Next level §f" + nextLevel,
+                            "§7Experience needed §e" + number(Math.round(needed)) + " XP",
+                            GuiTheme.progressBar(j, progress(jd), 10) + " §e" + progressPct(jd),
+                            "§7Next payout §a" + money(config.cashReward(nextLevel)),
+                            "", "§7Progress is based on your actual saved XP.")));
         }
 
         double ratio = progress(jd);
@@ -205,6 +233,12 @@ public final class GuiManager {
                         "§7Actions completed: §f" + number(jd.actions()),
                         "§7Lifetime earnings: §a" + money(jd.totalEarned()))));
 
+        inv.setItem(39, item(Material.WRITABLE_BOOK, "§b§lFIELD RECORD",
+                List.of("§8CAREER STATISTICS", GuiTheme.divider(),
+                        "§7Lifetime XP §f" + number(jd.totalXp()),
+                        "§7Eligible actions §f" + number(jd.actions()),
+                        "§7Lifetime earnings §a" + money(jd.totalEarned()),
+                        "", "§eClick to open your full career record.")));
         inv.setItem(41, item(Material.CHEST, "§6§lReward Chronicle",
                 List.of("§7Review all 50 level rewards.", "§7See what awaits further progress.", "",
                         "§eClick to open rewards.")));
@@ -280,7 +314,9 @@ public final class GuiManager {
         decorate(inv);
 
         for (int level = start; level <= end; level++) {
-            int slot = REWARD_SLOTS[level - start];
+            int slotIndex = level - start;
+            // Page two contains 22 entries: centre its final card rather than leaving it stranded at the left edge.
+            int slot = safePage == 1 && slotIndex == 21 ? 40 : REWARD_SLOTS[slotIndex];
             boolean completed = jd.level() > level || (level == 50 && jd.level() == 50);
             boolean current = jd.level() == level && level != 50;
             String state = completed ? "§a✓ LEVEL REACHED" : current ? "§e★ CURRENT LEVEL" : "§8🔒 LOCKED";
@@ -298,14 +334,15 @@ public final class GuiManager {
         if (safePage > 0) inv.setItem(48, item(Material.ARROW, "§e§lPrevious Page", List.of("§7Return to levels 1–28.")));
         if (end < 50) inv.setItem(50, item(Material.ARROW, "§e§lNext Page", List.of("§7Continue to levels 29–50.")));
         if (jd.level() >= 50 && !jd.level50Rewarded()) {
-            inv.setItem(49, item(Material.NETHER_STAR, "§6§lClaim Masterwork",
-                    List.of("§7Your level 50 reward is ready.", "§7Requires enough free inventory space.", "",
-                            "§eClick once to claim your reward.")));
+            inv.setItem(49, item(Material.NETHER_STAR, "§6§l✦ CLAIM MASTERWORK",
+                    List.of("§6YOUR FINAL PROFESSION HONOUR", GuiTheme.divider(),
+                            "§7Your level 50 reward is ready.", "§7Requires enough free inventory space.", "",
+                            "§eClick once to claim your reward."), true));
         } else {
             inv.setItem(49, item(jd.level50Rewarded() ? Material.EMERALD_BLOCK : Material.GOLD_BLOCK,
-                    "§6§lMasterwork Reward",
+                    jd.level50Rewarded() ? "§a§lMASTERWORK CLAIMED" : "§6§lMASTERWORK REWARD",
                     List.of(jd.level50Rewarded() ? "§a✓ Already claimed" : "§8Reach level 50 to unlock.",
-                            "§7Reward: §e" + masterName(j))));
+                            "§7Reward: §e" + masterName(j)), jd.level50Rewarded()));
         }
         inv.setItem(53, item(Material.ARROW, "§e§lBack to Profession", List.of("§7Return to the profession dossier.")));
         p.openInventory(inv);
@@ -410,7 +447,7 @@ public final class GuiManager {
                 lore.add("");
                 lore.add(unlocked ? "§aRecorded in your imperial archive." : "§7Keep working to earn this honour.");
                 inv.setItem(ACHIEVEMENT_SLOTS[index - start],
-                        item(material, (unlocked ? "§6§l" : "§f§l") + achievement.title(), lore));
+                        item(material, (unlocked ? "§6§l✦ " : "§f§l") + achievement.title(), lore, unlocked));
             }
         }
         if (safePage > 0) inv.setItem(48, item(Material.ARROW, "§e§lPrevious Page", List.of("§7Browse previous honours.")));
@@ -576,15 +613,18 @@ public final class GuiManager {
     /** Draw a restrained obsidian frame; content slots remain open and readable. */
     private void decorate(Inventory inv) {
         int size = inv.getSize();
-        Material dark = Material.BLACK_STAINED_GLASS_PANE;
-        Material edge = Material.GRAY_STAINED_GLASS_PANE;
         for (int slot = 0; slot < size; slot++) {
             int row = slot / 9;
             int col = slot % 9;
-            boolean border = row == 0 || row == (size / 9) - 1 || col == 0 || col == 8;
-            if (!border) continue;
-            Material pane = (col == 0 || col == 8) ? edge : dark;
-            if (row == 0 && (col == 2 || col == 6)) pane = Material.BROWN_STAINED_GLASS_PANE;
+            boolean horizontal = row == 0 || row == (size / 9) - 1;
+            boolean vertical = col == 0 || col == 8;
+            if (!horizontal && !vertical) continue;
+
+            // Blackstone-like edges with occasional bronze inlays create an imperial frame
+            // without stealing space from actual content or interactive controls.
+            Material pane = Material.BLACK_STAINED_GLASS_PANE;
+            if (horizontal && (col == 2 || col == 6)) pane = Material.BROWN_STAINED_GLASS_PANE;
+            if (vertical && (row == 2 || row == 4)) pane = Material.BROWN_STAINED_GLASS_PANE;
             inv.setItem(slot, item(pane, "§0", List.of()));
         }
     }
