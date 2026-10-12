@@ -113,7 +113,7 @@ public final class GuiManager {
                     List.of("§7" + j.getDescription(), "", "§7Status: §aACTIVE",
                             "§7Level: §e" + jd.level() + " §8/ §f50",
                             "§7XP: §f" + number(Math.round(jd.xp())) + " §8/ §f" + reqText(jd.level()),
-                            GuiTheme.progressBar(progress(jd), 10) + " §e" + progressPct(jd),
+                            GuiTheme.progressBar(j, progress(jd), 10) + " §e" + progressPct(jd),
                             "", "§eLeft-click §7to view this profession.",
                             "§cRight-click §7to leave safely.")));
         }
@@ -513,7 +513,7 @@ public final class GuiManager {
         for (JobType j : d.active()) {
             if (i >= slots.length) break;
             JobData jd = d.get(j);
-            inv.setItem(slots[i++], item(j.getMaterial(), "§a§l" + j.getDisplayName(),
+            inv.setItem(slots[i++], item(j.getMaterial(), GuiTheme.professionTitle(j),
                     List.of("§aACTIVE EMPLOYMENT", "§7Level: §e" + jd.level() + " §8/ §f50",
                             GuiTheme.progressBar(j, progress(jd), 8) + " §e" + progressPct(jd),
                             "", "§eClick to browse or manage professions.")));
