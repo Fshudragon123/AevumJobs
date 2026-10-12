@@ -181,7 +181,8 @@ public final class JobListener implements Listener {
             case PROGRESSION -> {
                 JobType j = h.job();
                 if (j == null) break;
-                if (slot == 41) gui.openRewards(p, data, j, 0);
+                if (slot == 39) gui.openStats(p, data);
+                else if (slot == 41) gui.openRewards(p, data, j, 0);
                 else if (slot == 49) gui.openMain(p, data);
                 else if (slot == 53) p.closeInventory();
                 else if (slot == 43) {
