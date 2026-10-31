@@ -1,0 +1,78 @@
+name: Build AevumAgriculture 1.0.0
+
+on:
+  push:
+    branches: [aevum-agriculture]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout agriculture branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore isolated AevumAgriculture source bundle
+        id: restore
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f pom.xml ]; then
+            echo "restored=false" >> "$GITHUB_OUTPUT"
+            echo "AevumAgriculture source is already installed."
+          else
+            test -d source-payload
+            cat source-payload/part*.txt | base64 --decode | tar -xJf - -C .
+            test -f pom.xml
+            test -f src/main/resources/plugin.yml
+            rm -rf source-payload
+            echo "restored=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Commit restored agriculture source to its isolated branch
+        if: steps.restore.outputs.restored == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Install AevumAgriculture 1.0.0 source"
+          git push origin HEAD:aevum-agriculture
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - name: Install resource-pack tooling
+        run: python -m pip install --disable-pip-version-check pillow PyYAML
+      - name: Verify crop, food and recipe catalogues
+        run: python tools/verify-source.py
+      - name: Generate embedded and standalone Java 26.2 resource pack
+        run: python tools/build-resource-pack.py
+      - name: Build shaded Paper plugin JAR
+        run: mvn --batch-mode --no-transfer-progress clean package
+      - name: Verify compiled plugin JAR and embedded pack
+        run: python tools/verify-plugin-jar.py target/AevumAgriculture-1.0.0.jar
+      - name: Package source archive
+        run: zip -qr AevumAgriculture-1.0.0-Source.zip src tools pom.xml README.md .gitignore
+      - name: Publish AevumAgriculture release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! gh release view agriculture-v1.0.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create agriculture-v1.0.0 --repo "$GITHUB_REPOSITORY" \
+              --title "AevumAgriculture 1.0.0" \
+              --notes "AevumAgriculture for AevumMC Paper 26.2 / Java 25. Custom 119-crop catalogue, 79 foods and ingredients, 78 recipes, six-stage crop visuals, bone-meal-only growth acceleration, Imperial Seed Exchange, production stations, edible foods, player-run businesses and dynamic commodity market. This project lives on the isolated aevum-agriculture branch in the AevumJobs repository because the connected GitHub tools do not expose repository creation."
+          fi
+          gh release upload agriculture-v1.0.0 --repo "$GITHUB_REPOSITORY" --clobber \
+            target/AevumAgriculture-1.0.0.jar \
+            AevumAgriculture-ResourcePack.zip \
+            AevumAgriculture-1.0.0-Source.zip \
+            README.md
