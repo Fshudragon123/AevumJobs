@@ -1,0 +1,98 @@
+settings:
+  language: en-GB
+  max-crops-per-player: 600
+  max-crops-per-chunk: 48
+  protect-player-crops: true
+  protect-player-stations: true
+  unloaded-growth: true
+  growth-update-ticks: 100
+  default-seed-return-chance: 0.28
+  harvest-xp-min: 4
+  harvest-xp-max: 9
+  crafting-xp: 5
+  market-sale-xp: 2
+  max-level: 50
+
+growth:
+  fast-growth: true
+  dry-farmland-speed-multiplier: 0.82
+  hydrated-farmland-speed-multiplier: 1.0
+  bone-meal-growth-fraction: 0.16
+  bone-meal-max-applications: 4
+  bone-meal-consume: 1
+  # Bone meal is the only growth-boosting/fertilising item in AevumAgriculture.
+  natural-regrowth-crops: [grapes, olives, figs, dates, pomegranates, apples, pears, quinces, apricots, plums, cherries, lemons, oranges, mangoes, bananas, coconuts, coffee, cacao, vanilla, strawberries, blueberries, raspberries, kiwi, dragonfruit, passionfruit, jackfruit, durian, mangosteen]
+
+economy:
+  currency-symbol: '£'
+  seed-shop-enabled: true
+  market-enabled: true
+  market-daily-cap-per-item: 256
+  market-base-price-multiplier: 1.0
+  market-min-price-multiplier: 0.55
+  market-max-price-multiplier: 1.35
+  market-price-impact: 0.55
+  business-registration-cost: 250.0
+  business-starting-reputation: 0
+  business-max-stock-per-item: 100000
+
+progression:
+  max-level: 50
+  xp-base: 90
+  xp-per-level: 55
+  harvest-xp-min: 4
+  harvest-xp-max: 9
+  craft-xp: 5
+  sale-xp: 2
+
+stations:
+  mill:
+    material: BARREL
+    price: 180.00
+    name: Stone Mill
+  press:
+    material: SMOKER
+    price: 220.00
+    name: Olive Press
+  oven:
+    material: BLAST_FURNACE
+    price: 250.00
+    name: Baker's Oven
+  kitchen:
+    material: FURNACE
+    price: 180.00
+    name: Cooking Hearth
+  drying_rack:
+    material: CAMPFIRE
+    price: 90.00
+    name: Drying Rack
+  fermenter:
+    material: BREWING_STAND
+    price: 220.00
+    name: Fermentation Stand
+  preparation:
+    material: LECTERN
+    price: 120.00
+    name: Preparation Table
+  mortar:
+    material: BARREL
+    price: 90.00
+    name: Mortar & Pestle
+
+resource-pack:
+  enabled: true
+  auto-send-on-join: true
+  force: false
+  prompt: "AevumAgriculture — custom crops, food and the Imperial Agrarian Ledger."
+  url: ""
+  host:
+    enabled: true
+    bind-address: "0.0.0.0"
+    port: 25822
+    public-url: ""
+
+integrations:
+  towny:
+    enabled: true
+  placeholders:
+    enabled: true

@@ -1,0 +1,768 @@
+recipes:
+  mill_emmer_wheat:
+    name: Mill Emmer Wheat
+    station: mill
+    ingredients:
+      produce_emmer_wheat: 3
+    result: wheat_flour
+    amount: 2
+    xp: 4
+    description: Prepare mill emmer wheat using the required agricultural ingredients.
+  mill_einkorn_wheat:
+    name: Mill Einkorn Wheat
+    station: mill
+    ingredients:
+      produce_einkorn_wheat: 3
+    result: wheat_flour
+    amount: 2
+    xp: 4
+    description: Prepare mill einkorn wheat using the required agricultural ingredients.
+  mill_durum_wheat:
+    name: Mill Durum Wheat
+    station: mill
+    ingredients:
+      produce_durum_wheat: 3
+    result: wheat_flour
+    amount: 2
+    xp: 4
+    description: Prepare mill durum wheat using the required agricultural ingredients.
+  mill_barley:
+    name: Mill Barley
+    station: mill
+    ingredients:
+      produce_barley: 3
+    result: barley_flour
+    amount: 2
+    xp: 4
+    description: Prepare mill barley using the required agricultural ingredients.
+  mill_rye:
+    name: Mill Rye
+    station: mill
+    ingredients:
+      produce_rye: 3
+    result: rye_flour
+    amount: 2
+    xp: 4
+    description: Prepare mill rye using the required agricultural ingredients.
+  mill_oats:
+    name: Mill Oats
+    station: mill
+    ingredients:
+      produce_oats: 3
+    result: oat_flour
+    amount: 2
+    xp: 4
+    description: Prepare mill oats using the required agricultural ingredients.
+  mill_chickpeas:
+    name: Mill Chickpeas
+    station: mill
+    ingredients:
+      produce_chickpeas: 3
+    result: chickpea_flour
+    amount: 2
+    xp: 4
+    description: Prepare mill chickpeas using the required agricultural ingredients.
+  mill_maize:
+    name: Mill Maize
+    station: mill
+    ingredients:
+      produce_maize: 3
+    result: cornmeal
+    amount: 2
+    xp: 4
+    description: Prepare mill maize using the required agricultural ingredients.
+  mill_rice:
+    name: Mill Rice
+    station: mill
+    ingredients:
+      produce_rice: 3
+    result: rice_flour
+    amount: 2
+    xp: 4
+    description: Prepare mill rice using the required agricultural ingredients.
+  press_olives:
+    name: Press Olive Oil
+    station: press
+    ingredients:
+      produce_olives: 4
+    result: olive_oil
+    amount: 1
+    xp: 6
+    description: Prepare press olive oil using the required agricultural ingredients.
+  press_sesame:
+    name: Press Sesame Oil
+    station: press
+    ingredients:
+      produce_sesame: 4
+    result: sesame_oil
+    amount: 1
+    xp: 6
+    description: Prepare press sesame oil using the required agricultural ingredients.
+  juice_grapes:
+    name: Press Grape Juice
+    station: press
+    ingredients:
+      produce_grapes: 3
+    result: grape_juice
+    amount: 2
+    xp: 4
+    description: Prepare press grape juice using the required agricultural ingredients.
+  syrup_pomegranate:
+    name: Reduce Pomegranate Syrup
+    station: kitchen
+    ingredients:
+      produce_pomegranates: 3
+      sugar: 1
+    result: pomegranate_syrup
+    amount: 1
+    xp: 7
+    description: Prepare reduce pomegranate syrup using the required agricultural
+      ingredients.
+  syrup_dates:
+    name: Prepare Date Syrup
+    station: kitchen
+    ingredients:
+      produce_dates: 3
+    result: date_syrup
+    amount: 1
+    xp: 6
+    description: Prepare prepare date syrup using the required agricultural ingredients.
+  dry_figs:
+    name: Dry Figs
+    station: drying_rack
+    ingredients:
+      produce_figs: 3
+    result: dried_figs
+    amount: 2
+    xp: 4
+    description: Prepare dry figs using the required agricultural ingredients.
+  dry_dates:
+    name: Dry Dates
+    station: drying_rack
+    ingredients:
+      produce_dates: 3
+    result: dried_dates
+    amount: 2
+    xp: 4
+    description: Prepare dry dates using the required agricultural ingredients.
+  dry_grapes:
+    name: Dry Grapes into Raisins
+    station: drying_rack
+    ingredients:
+      produce_grapes: 3
+    result: raisins
+    amount: 2
+    xp: 4
+    description: Prepare dry grapes into raisins using the required agricultural ingredients.
+  dry_herbs:
+    name: Dry Herb Bundle
+    station: drying_rack
+    ingredients:
+      produce_rosemary: 1
+      produce_thyme: 1
+      produce_mint: 1
+    result: dried_herbs
+    amount: 2
+    xp: 4
+    description: Prepare dry herb bundle using the required agricultural ingredients.
+  ferment_vinegar:
+    name: Ferment Grape Vinegar
+    station: fermenter
+    ingredients:
+      grape_juice: 2
+    result: grape_vinegar
+    amount: 1
+    xp: 8
+    description: Prepare ferment grape vinegar using the required agricultural ingredients.
+  pickle_onions:
+    name: Preserve Onions
+    station: fermenter
+    ingredients:
+      produce_onions: 3
+      grape_vinegar: 1
+    result: pickled_onions
+    amount: 2
+    xp: 5
+    description: Prepare preserve onions using the required agricultural ingredients.
+  pickle_cucumbers:
+    name: Preserve Cucumbers
+    station: fermenter
+    ingredients:
+      produce_cucumber: 3
+      grape_vinegar: 1
+    result: pickled_cucumbers
+    amount: 2
+    xp: 5
+    description: Prepare preserve cucumbers using the required agricultural ingredients.
+  preserve_olives:
+    name: Preserve Olives
+    station: fermenter
+    ingredients:
+      produce_olives: 3
+      olive_oil: 1
+    result: preserved_olives
+    amount: 2
+    xp: 5
+    description: Prepare preserve olives using the required agricultural ingredients.
+  spice_blend:
+    name: Grind Imperial Spice Blend
+    station: mortar
+    ingredients:
+      produce_coriander: 1
+      produce_cumin: 1
+      produce_black_pepper: 1
+    result: spice_mix
+    amount: 2
+    xp: 7
+    description: Prepare grind imperial spice blend using the required agricultural
+      ingredients.
+  tomato_paste:
+    name: Prepare Tomato Paste
+    station: preparation
+    ingredients:
+      produce_tomatoes: 4
+    result: tomato_paste
+    amount: 1
+    xp: 5
+    description: Prepare prepare tomato paste using the required agricultural ingredients.
+  coconut_milk:
+    name: Prepare Coconut Milk
+    station: preparation
+    ingredients:
+      produce_coconuts: 2
+    result: coconut_milk
+    amount: 2
+    xp: 5
+    description: Prepare prepare coconut milk using the required agricultural ingredients.
+  cacao_powder:
+    name: Grind Cacao Powder
+    station: mortar
+    ingredients:
+      produce_cacao: 3
+    result: cacao_powder
+    amount: 2
+    xp: 6
+    description: Prepare grind cacao powder using the required agricultural ingredients.
+  coffee_ground:
+    name: Grind Coffee
+    station: mortar
+    ingredients:
+      produce_coffee: 3
+    result: ground_coffee
+    amount: 2
+    xp: 6
+    description: Prepare grind coffee using the required agricultural ingredients.
+  tea_dry:
+    name: Dry Tea Leaves
+    station: drying_rack
+    ingredients:
+      produce_tea: 3
+    result: tea_leaves_dried
+    amount: 2
+    xp: 4
+    description: Prepare dry tea leaves using the required agricultural ingredients.
+  vanilla_extract:
+    name: Prepare Vanilla Extract
+    station: fermenter
+    ingredients:
+      produce_vanilla: 2
+    result: vanilla_extract
+    amount: 1
+    xp: 8
+    description: Prepare prepare vanilla extract using the required agricultural ingredients.
+  sugarcane_sugar:
+    name: Process Sugar
+    station: mill
+    ingredients:
+      produce_sugarcane: 4
+    result: sugar
+    amount: 2
+    xp: 6
+    description: Prepare process sugar using the required agricultural ingredients.
+  bake_emmer_flatbread:
+    name: Bake Emmer Flatbread
+    station: oven
+    ingredients:
+      wheat_flour: 2
+    result: emmer_flatbread
+    amount: 1
+    xp: 7
+    description: Prepare bake emmer flatbread using the required agricultural ingredients.
+  bake_barley_bread:
+    name: Bake Barley Bread
+    station: oven
+    ingredients:
+      barley_flour: 2
+    result: barley_bread
+    amount: 1
+    xp: 7
+    description: Prepare bake barley bread using the required agricultural ingredients.
+  bake_wheat_loaf:
+    name: Bake Wheat Loaf
+    station: oven
+    ingredients:
+      wheat_flour: 3
+    result: wheat_loaf
+    amount: 1
+    xp: 7
+    description: Prepare bake wheat loaf using the required agricultural ingredients.
+  bake_olive_bread:
+    name: Bake Olive Bread
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      olive_oil: 1
+      produce_olives: 1
+    result: olive_bread
+    amount: 1
+    xp: 7
+    description: Prepare bake olive bread using the required agricultural ingredients.
+  bake_herb_bread:
+    name: Bake Herb Bread
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      dried_herbs: 1
+    result: herb_bread
+    amount: 1
+    xp: 7
+    description: Prepare bake herb bread using the required agricultural ingredients.
+  bake_sesame_bread:
+    name: Bake Sesame Bread
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      produce_sesame: 1
+    result: sesame_bread
+    amount: 1
+    xp: 7
+    description: Prepare bake sesame bread using the required agricultural ingredients.
+  bake_honey_cakes:
+    name: Bake Honey Cakes
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      produce_dates: 1
+    result: honey_cakes
+    amount: 1
+    xp: 7
+    description: Prepare bake honey cakes using the required agricultural ingredients.
+  bake_oatcakes:
+    name: Bake Oatcakes
+    station: oven
+    ingredients:
+      oat_flour: 2
+    result: oatcakes
+    amount: 1
+    xp: 7
+    description: Prepare bake oatcakes using the required agricultural ingredients.
+  bake_chickpea_pancakes:
+    name: Bake Chickpea Pancakes
+    station: oven
+    ingredients:
+      chickpea_flour: 2
+    result: chickpea_pancakes
+    amount: 1
+    xp: 7
+    description: Prepare bake chickpea pancakes using the required agricultural ingredients.
+  bake_rice_cakes:
+    name: Bake Rice Cakes
+    station: oven
+    ingredients:
+      rice_flour: 2
+    result: rice_cakes
+    amount: 1
+    xp: 7
+    description: Prepare bake rice cakes using the required agricultural ingredients.
+  bake_corn_cakes:
+    name: Bake Corn Cakes
+    station: oven
+    ingredients:
+      maize_flour: 2
+    result: corn_cakes
+    amount: 1
+    xp: 7
+    description: Prepare bake corn cakes using the required agricultural ingredients.
+  bake_fig_pastries:
+    name: Bake Fig Pastries
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      dried_figs: 1
+    result: fig_pastries
+    amount: 1
+    xp: 7
+    description: Prepare bake fig pastries using the required agricultural ingredients.
+  bake_date_loaf:
+    name: Bake Date Loaf
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      dried_dates: 1
+    result: date_loaf
+    amount: 1
+    xp: 7
+    description: Prepare bake date loaf using the required agricultural ingredients.
+  bake_nut_bread:
+    name: Bake Nut Bread
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      produce_almonds: 1
+      produce_walnuts: 1
+    result: nut_bread
+    amount: 1
+    xp: 7
+    description: Prepare bake nut bread using the required agricultural ingredients.
+  bake_fig_rolls:
+    name: Bake Fig Rolls
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      dried_figs: 1
+    result: fig_rolls
+    amount: 1
+    xp: 7
+    description: Prepare bake fig rolls using the required agricultural ingredients.
+  bake_apple_tart:
+    name: Bake Apple Tart
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      produce_apples: 2
+    result: apple_tart
+    amount: 1
+    xp: 7
+    description: Prepare bake apple tart using the required agricultural ingredients.
+  bake_berry_pie:
+    name: Bake Berry Pie
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      produce_strawberries: 1
+      produce_blueberries: 1
+    result: berry_pie
+    amount: 1
+    xp: 7
+    description: Prepare bake berry pie using the required agricultural ingredients.
+  bake_cacao_cake:
+    name: Bake Cacao Cake
+    station: oven
+    ingredients:
+      wheat_flour: 2
+      cacao_powder: 1
+      sugar: 1
+    result: cacao_cake
+    amount: 1
+    xp: 7
+    description: Prepare bake cacao cake using the required agricultural ingredients.
+  bake_sweet_potato_cakes:
+    name: Bake Sweet Potato Cakes
+    station: oven
+    ingredients:
+      produce_sweet_potatoes: 2
+      wheat_flour: 1
+    result: sweet_potato_cakes
+    amount: 1
+    xp: 7
+    description: Prepare bake sweet potato cakes using the required agricultural ingredients.
+  bake_honey_almond_brittle:
+    name: Bake Honey Almond Brittle
+    station: oven
+    ingredients:
+      produce_almonds: 2
+      date_syrup: 1
+    result: honey_almond_brittle
+    amount: 1
+    xp: 7
+    description: Prepare bake honey almond brittle using the required agricultural
+      ingredients.
+  cook_lentil_stew:
+    name: Cook Lentil Stew
+    station: kitchen
+    ingredients:
+      produce_lentils: 2
+      produce_onions: 1
+      dried_herbs: 1
+    result: lentil_stew
+    amount: 1
+    xp: 8
+    description: Prepare cook lentil stew using the required agricultural ingredients.
+  cook_chickpea_stew:
+    name: Cook Chickpea Stew
+    station: kitchen
+    ingredients:
+      produce_chickpeas: 2
+      produce_onions: 1
+      produce_garlic: 1
+    result: chickpea_stew
+    amount: 1
+    xp: 8
+    description: Prepare cook chickpea stew using the required agricultural ingredients.
+  cook_barley_vegetable_soup:
+    name: Cook Barley Vegetable Soup
+    station: kitchen
+    ingredients:
+      produce_barley: 2
+      produce_carrots: 1
+      produce_onions: 1
+    result: barley_vegetable_soup
+    amount: 1
+    xp: 8
+    description: Prepare cook barley vegetable soup using the required agricultural
+      ingredients.
+  cook_fava_bean_stew:
+    name: Cook Fava Bean Stew
+    station: kitchen
+    ingredients:
+      produce_fava_beans: 2
+      produce_onions: 1
+      produce_garlic: 1
+    result: fava_bean_stew
+    amount: 1
+    xp: 8
+    description: Prepare cook fava bean stew using the required agricultural ingredients.
+  cook_onion_soup:
+    name: Cook Onion Soup
+    station: kitchen
+    ingredients:
+      produce_onions: 3
+      dried_herbs: 1
+    result: onion_soup
+    amount: 1
+    xp: 8
+    description: Prepare cook onion soup using the required agricultural ingredients.
+  cook_roasted_vegetables:
+    name: Cook Roasted Vegetables
+    station: kitchen
+    ingredients:
+      produce_carrots: 1
+      produce_onions: 1
+      produce_turnips: 1
+    result: roasted_vegetables
+    amount: 1
+    xp: 8
+    description: Prepare cook roasted vegetables using the required agricultural ingredients.
+  cook_spiced_chickpeas:
+    name: Cook Spiced Chickpeas
+    station: kitchen
+    ingredients:
+      produce_chickpeas: 2
+      spice_mix: 1
+    result: spiced_chickpeas
+    amount: 1
+    xp: 8
+    description: Prepare cook spiced chickpeas using the required agricultural ingredients.
+  cook_pumpkin_soup:
+    name: Cook Pumpkin Soup
+    station: kitchen
+    ingredients:
+      produce_pumpkins: 2
+      produce_onions: 1
+    result: pumpkin_soup
+    amount: 1
+    xp: 8
+    description: Prepare cook pumpkin soup using the required agricultural ingredients.
+  cook_potato_stew:
+    name: Cook Potato Stew
+    station: kitchen
+    ingredients:
+      produce_potatoes: 2
+      produce_carrots: 1
+      produce_onions: 1
+    result: potato_stew
+    amount: 1
+    xp: 8
+    description: Prepare cook potato stew using the required agricultural ingredients.
+  cook_quinoa_bowl:
+    name: Cook Quinoa Bowl
+    station: kitchen
+    ingredients:
+      produce_quinoa: 2
+      produce_tomatoes: 1
+      produce_avocados: 1
+    result: quinoa_bowl
+    amount: 1
+    xp: 8
+    description: Prepare cook quinoa bowl using the required agricultural ingredients.
+  cook_pepper_bean_pot:
+    name: Cook Pepper & Bean Pot
+    station: kitchen
+    ingredients:
+      produce_peas: 1
+      produce_chillies: 1
+      produce_onions: 1
+    result: pepper_bean_pot
+    amount: 1
+    xp: 8
+    description: Prepare cook pepper & bean pot using the required agricultural ingredients.
+  cook_tomato_lentil_pot:
+    name: Cook Tomato & Lentil Pot
+    station: kitchen
+    ingredients:
+      produce_tomatoes: 2
+      produce_lentils: 1
+      produce_garlic: 1
+    result: tomato_lentil_pot
+    amount: 1
+    xp: 8
+    description: Prepare cook tomato & lentil pot using the required agricultural
+      ingredients.
+  cook_stuffed_vine_leaves:
+    name: Cook Stuffed Vine Leaves
+    station: kitchen
+    ingredients:
+      produce_grapes: 2
+      produce_rice: 1
+      dried_herbs: 1
+    result: stuffed_vine_leaves
+    amount: 1
+    xp: 8
+    description: Prepare cook stuffed vine leaves using the required agricultural
+      ingredients.
+  prepare_olive_herb_salad:
+    name: Prepare Olive & Herb Salad
+    station: preparation
+    ingredients:
+      produce_olives: 2
+      produce_lettuce: 1
+      dried_herbs: 1
+    result: olive_herb_salad
+    amount: 1
+    xp: 5
+    description: Prepare prepare olive & herb salad using the required agricultural
+      ingredients.
+  prepare_dried_fig_snack:
+    name: Prepare Dried Fig Snack
+    station: preparation
+    ingredients:
+      dried_figs: 2
+    result: dried_fig_snack
+    amount: 1
+    xp: 5
+    description: Prepare prepare dried fig snack using the required agricultural ingredients.
+  prepare_date_bites:
+    name: Prepare Date Bites
+    station: preparation
+    ingredients:
+      dried_dates: 2
+    result: date_bites
+    amount: 1
+    xp: 5
+    description: Prepare prepare date bites using the required agricultural ingredients.
+  prepare_raisin_mix:
+    name: Prepare Raisin & Nut Mix
+    station: preparation
+    ingredients:
+      raisins: 2
+      produce_almonds: 1
+    result: raisin_mix
+    amount: 1
+    xp: 5
+    description: Prepare prepare raisin & nut mix using the required agricultural
+      ingredients.
+  prepare_pomegranate_sweets:
+    name: Prepare Pomegranate Sweets
+    station: preparation
+    ingredients:
+      pomegranate_syrup: 1
+      sugar: 1
+    result: pomegranate_sweets
+    amount: 1
+    xp: 5
+    description: Prepare prepare pomegranate sweets using the required agricultural
+      ingredients.
+  drink_grape_juice_drink:
+    name: Prepare Grape Juice
+    station: kitchen
+    ingredients:
+      grape_juice: 1
+    result: grape_juice_drink
+    amount: 1
+    xp: 5
+    description: Prepare prepare grape juice using the required agricultural ingredients.
+  drink_pomegranate_drink:
+    name: Prepare Pomegranate Juice
+    station: kitchen
+    ingredients:
+      produce_pomegranates: 2
+    result: pomegranate_drink
+    amount: 1
+    xp: 5
+    description: Prepare prepare pomegranate juice using the required agricultural
+      ingredients.
+  drink_apple_juice:
+    name: Prepare Apple Juice
+    station: kitchen
+    ingredients:
+      produce_apples: 2
+    result: apple_juice
+    amount: 1
+    xp: 5
+    description: Prepare prepare apple juice using the required agricultural ingredients.
+  drink_lemon_drink:
+    name: Prepare Lemon Drink
+    station: kitchen
+    ingredients:
+      produce_lemons: 2
+    result: lemon_drink
+    amount: 1
+    xp: 5
+    description: Prepare prepare lemon drink using the required agricultural ingredients.
+  drink_mint_infusion:
+    name: Prepare Mint Infusion
+    station: kitchen
+    ingredients:
+      produce_mint: 2
+    result: mint_infusion
+    amount: 1
+    xp: 5
+    description: Prepare prepare mint infusion using the required agricultural ingredients.
+  drink_herbal_tea:
+    name: Prepare Herbal Tea
+    station: kitchen
+    ingredients:
+      tea_leaves_dried: 1
+      dried_herbs: 1
+    result: herbal_tea
+    amount: 1
+    xp: 5
+    description: Prepare prepare herbal tea using the required agricultural ingredients.
+  drink_black_tea:
+    name: Prepare Black Tea
+    station: kitchen
+    ingredients:
+      tea_leaves_dried: 2
+    result: black_tea
+    amount: 1
+    xp: 5
+    description: Prepare prepare black tea using the required agricultural ingredients.
+  drink_coffee_cup:
+    name: Prepare Coffee
+    station: kitchen
+    ingredients:
+      ground_coffee: 1
+    result: coffee_cup
+    amount: 1
+    xp: 5
+    description: Prepare prepare coffee using the required agricultural ingredients.
+  drink_cacao_drink:
+    name: Prepare Cacao Drink
+    station: kitchen
+    ingredients:
+      cacao_powder: 1
+      sugar: 1
+    result: cacao_drink
+    amount: 1
+    xp: 5
+    description: Prepare prepare cacao drink using the required agricultural ingredients.
+  drink_date_syrup_drink:
+    name: Prepare Date Syrup Drink
+    station: kitchen
+    ingredients:
+      date_syrup: 1
+    result: date_syrup_drink
+    amount: 1
+    xp: 5
+    description: Prepare prepare date syrup drink using the required agricultural
+      ingredients.

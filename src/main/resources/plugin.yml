@@ -1,0 +1,46 @@
+name: AevumAgriculture
+version: '1.0.0'
+main: net.aevummc.agriculture.AevumAgriculture
+api-version: '26.2'
+author: AevumMC
+website: https://github.com/Fshudragon123/AevumJobs/tree/aevum-agriculture
+description: AevumMC custom crop growth, seed shop, edible foods, production stations and player-run agricultural economy.
+softdepend: [Vault, PlaceholderAPI, Towny, AevumJobs, AevumReligion]
+commands:
+  agriculture:
+    description: Open and manage AevumAgriculture.
+    usage: /agri [menu|shop|seeds|recipes|market|business|stats|top|admin]
+    aliases: [agri, farm, farming]
+permissions:
+  aevumagriculture.use:
+    default: true
+  aevumagriculture.plant:
+    default: true
+  aevumagriculture.harvest:
+    default: true
+  aevumagriculture.process:
+    default: true
+  aevumagriculture.cook:
+    default: true
+  aevumagriculture.business:
+    default: true
+  aevumagriculture.market:
+    default: true
+  aevumagriculture.admin:
+    default: op
+    children:
+      aevumagriculture.admin.reload: true
+      aevumagriculture.admin.give: true
+      aevumagriculture.admin.station: true
+      aevumagriculture.admin.stats: true
+      aevumagriculture.admin.xp: true
+  aevumagriculture.admin.reload:
+    default: op
+  aevumagriculture.admin.give:
+    default: op
+  aevumagriculture.admin.station:
+    default: op
+  aevumagriculture.admin.stats:
+    default: op
+  aevumagriculture.admin.xp:
+    default: op

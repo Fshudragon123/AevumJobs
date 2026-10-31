@@ -1,0 +1,712 @@
+items:
+  wheat_flour:
+    name: Wheat Flour
+    category: flour
+    model: ingredient/wheat_flour
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 4.0
+    description: A crafted Aevum agricultural flour product.
+  barley_flour:
+    name: Barley Flour
+    category: flour
+    model: ingredient/barley_flour
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 3.8
+    description: A crafted Aevum agricultural flour product.
+  rye_flour:
+    name: Rye Flour
+    category: flour
+    model: ingredient/rye_flour
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 3.8
+    description: A crafted Aevum agricultural flour product.
+  oat_flour:
+    name: Oat Flour
+    category: flour
+    model: ingredient/oat_flour
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 3.8
+    description: A crafted Aevum agricultural flour product.
+  chickpea_flour:
+    name: Chickpea Flour
+    category: flour
+    model: ingredient/chickpea_flour
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 4.5
+    description: A crafted Aevum agricultural flour product.
+  maize_flour:
+    name: Maize Meal
+    category: flour
+    model: ingredient/maize_flour
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 4.2
+    description: A crafted Aevum agricultural flour product.
+  rice_flour:
+    name: Rice Flour
+    category: flour
+    model: ingredient/rice_flour
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 4.2
+    description: A crafted Aevum agricultural flour product.
+  cornmeal:
+    name: Cornmeal
+    category: flour
+    model: ingredient/cornmeal
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 3.8
+    description: A crafted Aevum agricultural flour product.
+  olive_oil:
+    name: Olive Oil
+    category: oil
+    model: ingredient/olive_oil
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 7.5
+    description: A crafted Aevum agricultural oil product.
+  sesame_oil:
+    name: Sesame Oil
+    category: oil
+    model: ingredient/sesame_oil
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 8.0
+    description: A crafted Aevum agricultural oil product.
+  grape_juice:
+    name: Fresh Grape Juice
+    category: juice
+    model: ingredient/grape_juice
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 5.0
+    description: A crafted Aevum agricultural juice product.
+  pomegranate_syrup:
+    name: Pomegranate Syrup
+    category: syrup
+    model: ingredient/pomegranate_syrup
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 7.0
+    description: A crafted Aevum agricultural syrup product.
+  date_syrup:
+    name: Date Syrup
+    category: syrup
+    model: ingredient/date_syrup
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 6.5
+    description: A crafted Aevum agricultural syrup product.
+  grape_vinegar:
+    name: Grape Vinegar
+    category: preserve
+    model: ingredient/grape_vinegar
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 4.5
+    description: A crafted Aevum agricultural preserve product.
+  dried_figs:
+    name: Dried Figs
+    category: preserve
+    model: ingredient/dried_figs
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 6.0
+    description: A crafted Aevum agricultural preserve product.
+  dried_dates:
+    name: Dried Dates
+    category: preserve
+    model: ingredient/dried_dates
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 6.0
+    description: A crafted Aevum agricultural preserve product.
+  raisins:
+    name: Raisins
+    category: preserve
+    model: ingredient/raisins
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 5.5
+    description: A crafted Aevum agricultural preserve product.
+  dried_herbs:
+    name: Dried Herbs
+    category: herbs
+    model: ingredient/dried_herbs
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 4.0
+    description: A crafted Aevum agricultural herbs product.
+  pickled_onions:
+    name: Pickled Onions
+    category: preserve
+    model: ingredient/pickled_onions
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 4.5
+    description: A crafted Aevum agricultural preserve product.
+  pickled_cucumbers:
+    name: Pickled Cucumbers
+    category: preserve
+    model: ingredient/pickled_cucumbers
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 4.5
+    description: A crafted Aevum agricultural preserve product.
+  preserved_olives:
+    name: Preserved Olives
+    category: preserve
+    model: ingredient/preserved_olives
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 6.0
+    description: A crafted Aevum agricultural preserve product.
+  spice_mix:
+    name: Imperial Spice Blend
+    category: spices
+    model: ingredient/spice_mix
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 8.0
+    description: A crafted Aevum agricultural spices product.
+  sugar:
+    name: Refined Sugar
+    category: sweetener
+    model: ingredient/sugar
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 5.0
+    description: A crafted Aevum agricultural sweetener product.
+  cacao_powder:
+    name: Cacao Powder
+    category: powder
+    model: ingredient/cacao_powder
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 7.0
+    description: A crafted Aevum agricultural powder product.
+  ground_coffee:
+    name: Ground Coffee
+    category: powder
+    model: ingredient/ground_coffee
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 8.5
+    description: A crafted Aevum agricultural powder product.
+  tea_leaves_dried:
+    name: Dried Tea Leaves
+    category: herbs
+    model: ingredient/tea_leaves_dried
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 6.5
+    description: A crafted Aevum agricultural herbs product.
+  coconut_milk:
+    name: Coconut Milk
+    category: milk
+    model: ingredient/coconut_milk
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 6.0
+    description: A crafted Aevum agricultural milk product.
+  vanilla_extract:
+    name: Vanilla Extract
+    category: extract
+    model: ingredient/vanilla_extract
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 9.0
+    description: A crafted Aevum agricultural extract product.
+  tomato_paste:
+    name: Tomato Paste
+    category: paste
+    model: ingredient/tomato_paste
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 5.0
+    description: A crafted Aevum agricultural paste product.
+  mashed_potato:
+    name: Mashed Potato
+    category: prepared
+    model: ingredient/mashed_potato
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 4.0
+    description: A crafted Aevum agricultural prepared product.
+  sugarcane_molasses:
+    name: Sugarcane Molasses
+    category: sweetener
+    model: ingredient/sugarcane_molasses
+    edible: false
+    nutrition: 0
+    saturation: 0.0
+    market-price: 5.5
+    description: A crafted Aevum agricultural sweetener product.
+  emmer_flatbread:
+    name: Emmer Flatbread
+    category: bread
+    model: food/emmer_flatbread
+    edible: true
+    nutrition: 5
+    saturation: 0.45
+    market-price: 6.0
+    description: A crafted Aevum agricultural bread product.
+  barley_bread:
+    name: Barley Bread
+    category: bread
+    model: food/barley_bread
+    edible: true
+    nutrition: 5
+    saturation: 0.45
+    market-price: 6.0
+    description: A crafted Aevum agricultural bread product.
+  wheat_loaf:
+    name: Wheat Loaf
+    category: bread
+    model: food/wheat_loaf
+    edible: true
+    nutrition: 6
+    saturation: 0.55
+    market-price: 7.0
+    description: A crafted Aevum agricultural bread product.
+  olive_bread:
+    name: Olive Bread
+    category: bread
+    model: food/olive_bread
+    edible: true
+    nutrition: 7
+    saturation: 0.7
+    market-price: 9.0
+    description: A crafted Aevum agricultural bread product.
+  herb_bread:
+    name: Herb Bread
+    category: bread
+    model: food/herb_bread
+    edible: true
+    nutrition: 6
+    saturation: 0.6
+    market-price: 8.0
+    description: A crafted Aevum agricultural bread product.
+  sesame_bread:
+    name: Sesame Bread
+    category: bread
+    model: food/sesame_bread
+    edible: true
+    nutrition: 6
+    saturation: 0.6
+    market-price: 8.0
+    description: A crafted Aevum agricultural bread product.
+  honey_cakes:
+    name: Honey Cakes
+    category: dessert
+    model: food/honey_cakes
+    edible: true
+    nutrition: 6
+    saturation: 0.8
+    market-price: 10.0
+    description: A crafted Aevum agricultural dessert product.
+  oatcakes:
+    name: Oatcakes
+    category: bread
+    model: food/oatcakes
+    edible: true
+    nutrition: 4
+    saturation: 0.45
+    market-price: 6.0
+    description: A crafted Aevum agricultural bread product.
+  chickpea_pancakes:
+    name: Chickpea Pancakes
+    category: meal
+    model: food/chickpea_pancakes
+    edible: true
+    nutrition: 6
+    saturation: 0.6
+    market-price: 8.0
+    description: A crafted Aevum agricultural meal product.
+  rice_cakes:
+    name: Rice Cakes
+    category: bread
+    model: food/rice_cakes
+    edible: true
+    nutrition: 4
+    saturation: 0.4
+    market-price: 6.0
+    description: A crafted Aevum agricultural bread product.
+  corn_cakes:
+    name: Corn Cakes
+    category: bread
+    model: food/corn_cakes
+    edible: true
+    nutrition: 5
+    saturation: 0.5
+    market-price: 7.0
+    description: A crafted Aevum agricultural bread product.
+  fig_pastries:
+    name: Fig Pastries
+    category: dessert
+    model: food/fig_pastries
+    edible: true
+    nutrition: 7
+    saturation: 0.8
+    market-price: 12.0
+    description: A crafted Aevum agricultural dessert product.
+  date_loaf:
+    name: Date Loaf
+    category: dessert
+    model: food/date_loaf
+    edible: true
+    nutrition: 7
+    saturation: 0.8
+    market-price: 11.0
+    description: A crafted Aevum agricultural dessert product.
+  nut_bread:
+    name: Nut Bread
+    category: bread
+    model: food/nut_bread
+    edible: true
+    nutrition: 7
+    saturation: 0.9
+    market-price: 12.0
+    description: A crafted Aevum agricultural bread product.
+  lentil_stew:
+    name: Lentil Stew
+    category: stew
+    model: food/lentil_stew
+    edible: true
+    nutrition: 8
+    saturation: 0.9
+    market-price: 11.0
+    description: A crafted Aevum agricultural stew product.
+  chickpea_stew:
+    name: Chickpea Stew
+    category: stew
+    model: food/chickpea_stew
+    edible: true
+    nutrition: 8
+    saturation: 0.9
+    market-price: 11.0
+    description: A crafted Aevum agricultural stew product.
+  barley_vegetable_soup:
+    name: Barley Vegetable Soup
+    category: soup
+    model: food/barley_vegetable_soup
+    edible: true
+    nutrition: 7
+    saturation: 0.8
+    market-price: 10.0
+    description: A crafted Aevum agricultural soup product.
+  fava_bean_stew:
+    name: Fava Bean Stew
+    category: stew
+    model: food/fava_bean_stew
+    edible: true
+    nutrition: 8
+    saturation: 0.9
+    market-price: 11.0
+    description: A crafted Aevum agricultural stew product.
+  onion_soup:
+    name: Onion Soup
+    category: soup
+    model: food/onion_soup
+    edible: true
+    nutrition: 6
+    saturation: 0.65
+    market-price: 8.0
+    description: A crafted Aevum agricultural soup product.
+  stuffed_vine_leaves:
+    name: Stuffed Vine Leaves
+    category: meal
+    model: food/stuffed_vine_leaves
+    edible: true
+    nutrition: 8
+    saturation: 1.0
+    market-price: 13.0
+    description: A crafted Aevum agricultural meal product.
+  roasted_vegetables:
+    name: Roasted Vegetables
+    category: meal
+    model: food/roasted_vegetables
+    edible: true
+    nutrition: 7
+    saturation: 0.8
+    market-price: 10.0
+    description: A crafted Aevum agricultural meal product.
+  olive_herb_salad:
+    name: Olive & Herb Salad
+    category: salad
+    model: food/olive_herb_salad
+    edible: true
+    nutrition: 5
+    saturation: 0.65
+    market-price: 9.0
+    description: A crafted Aevum agricultural salad product.
+  spiced_chickpeas:
+    name: Spiced Chickpeas
+    category: snack
+    model: food/spiced_chickpeas
+    edible: true
+    nutrition: 6
+    saturation: 0.65
+    market-price: 8.0
+    description: A crafted Aevum agricultural snack product.
+  pumpkin_soup:
+    name: Pumpkin Soup
+    category: soup
+    model: food/pumpkin_soup
+    edible: true
+    nutrition: 7
+    saturation: 0.75
+    market-price: 9.0
+    description: A crafted Aevum agricultural soup product.
+  potato_stew:
+    name: Potato Stew
+    category: stew
+    model: food/potato_stew
+    edible: true
+    nutrition: 8
+    saturation: 0.85
+    market-price: 10.0
+    description: A crafted Aevum agricultural stew product.
+  quinoa_bowl:
+    name: Quinoa Bowl
+    category: meal
+    model: food/quinoa_bowl
+    edible: true
+    nutrition: 8
+    saturation: 1.0
+    market-price: 12.0
+    description: A crafted Aevum agricultural meal product.
+  pepper_bean_pot:
+    name: Pepper & Bean Pot
+    category: stew
+    model: food/pepper_bean_pot
+    edible: true
+    nutrition: 8
+    saturation: 0.95
+    market-price: 12.0
+    description: A crafted Aevum agricultural stew product.
+  tomato_lentil_pot:
+    name: Tomato & Lentil Pot
+    category: stew
+    model: food/tomato_lentil_pot
+    edible: true
+    nutrition: 8
+    saturation: 0.95
+    market-price: 12.0
+    description: A crafted Aevum agricultural stew product.
+  dried_fig_snack:
+    name: Dried Fig Snack
+    category: preserve
+    model: food/dried_fig_snack
+    edible: true
+    nutrition: 4
+    saturation: 0.45
+    market-price: 6.0
+    description: A crafted Aevum agricultural preserve product.
+  date_bites:
+    name: Date Bites
+    category: snack
+    model: food/date_bites
+    edible: true
+    nutrition: 5
+    saturation: 0.55
+    market-price: 7.0
+    description: A crafted Aevum agricultural snack product.
+  raisin_mix:
+    name: Raisin & Nut Mix
+    category: snack
+    model: food/raisin_mix
+    edible: true
+    nutrition: 5
+    saturation: 0.6
+    market-price: 8.0
+    description: A crafted Aevum agricultural snack product.
+  honey_almond_brittle:
+    name: Honey Almond Brittle
+    category: dessert
+    model: food/honey_almond_brittle
+    edible: true
+    nutrition: 5
+    saturation: 0.8
+    market-price: 10.0
+    description: A crafted Aevum agricultural dessert product.
+  fig_rolls:
+    name: Fig Rolls
+    category: dessert
+    model: food/fig_rolls
+    edible: true
+    nutrition: 6
+    saturation: 0.7
+    market-price: 9.0
+    description: A crafted Aevum agricultural dessert product.
+  apple_tart:
+    name: Apple Tart
+    category: dessert
+    model: food/apple_tart
+    edible: true
+    nutrition: 7
+    saturation: 0.9
+    market-price: 12.0
+    description: A crafted Aevum agricultural dessert product.
+  pomegranate_sweets:
+    name: Pomegranate Sweets
+    category: dessert
+    model: food/pomegranate_sweets
+    edible: true
+    nutrition: 6
+    saturation: 0.8
+    market-price: 11.0
+    description: A crafted Aevum agricultural dessert product.
+  berry_pie:
+    name: Berry Pie
+    category: dessert
+    model: food/berry_pie
+    edible: true
+    nutrition: 8
+    saturation: 1.0
+    market-price: 13.0
+    description: A crafted Aevum agricultural dessert product.
+  cacao_cake:
+    name: Cacao Cake
+    category: dessert
+    model: food/cacao_cake
+    edible: true
+    nutrition: 8
+    saturation: 1.1
+    market-price: 15.0
+    description: A crafted Aevum agricultural dessert product.
+  sweet_potato_cakes:
+    name: Sweet Potato Cakes
+    category: dessert
+    model: food/sweet_potato_cakes
+    edible: true
+    nutrition: 7
+    saturation: 0.8
+    market-price: 10.0
+    description: A crafted Aevum agricultural dessert product.
+  grape_juice_drink:
+    name: Grape Juice
+    category: drink
+    model: food/grape_juice_drink
+    edible: true
+    nutrition: 4
+    saturation: 0.2
+    market-price: 6.0
+    description: A crafted Aevum agricultural drink product.
+  pomegranate_drink:
+    name: Pomegranate Juice
+    category: drink
+    model: food/pomegranate_drink
+    edible: true
+    nutrition: 4
+    saturation: 0.2
+    market-price: 7.0
+    description: A crafted Aevum agricultural drink product.
+  apple_juice:
+    name: Apple Juice
+    category: drink
+    model: food/apple_juice
+    edible: true
+    nutrition: 4
+    saturation: 0.2
+    market-price: 6.0
+    description: A crafted Aevum agricultural drink product.
+  lemon_drink:
+    name: Lemon Drink
+    category: drink
+    model: food/lemon_drink
+    edible: true
+    nutrition: 3
+    saturation: 0.15
+    market-price: 5.0
+    description: A crafted Aevum agricultural drink product.
+  mint_infusion:
+    name: Mint Infusion
+    category: drink
+    model: food/mint_infusion
+    edible: true
+    nutrition: 3
+    saturation: 0.15
+    market-price: 5.0
+    description: A crafted Aevum agricultural drink product.
+  herbal_tea:
+    name: Herbal Tea
+    category: drink
+    model: food/herbal_tea
+    edible: true
+    nutrition: 3
+    saturation: 0.2
+    market-price: 6.0
+    description: A crafted Aevum agricultural drink product.
+  black_tea:
+    name: Black Tea
+    category: drink
+    model: food/black_tea
+    edible: true
+    nutrition: 4
+    saturation: 0.25
+    market-price: 8.0
+    description: A crafted Aevum agricultural drink product.
+  coffee_cup:
+    name: Coffee
+    category: drink
+    model: food/coffee_cup
+    edible: true
+    nutrition: 4
+    saturation: 0.25
+    market-price: 10.0
+    description: A crafted Aevum agricultural drink product.
+  cacao_drink:
+    name: Cacao Drink
+    category: drink
+    model: food/cacao_drink
+    edible: true
+    nutrition: 5
+    saturation: 0.35
+    market-price: 10.0
+    description: A crafted Aevum agricultural drink product.
+  date_syrup_drink:
+    name: Date Syrup Drink
+    category: drink
+    model: food/date_syrup_drink
+    edible: true
+    nutrition: 5
+    saturation: 0.35
+    market-price: 7.0
+    description: A crafted Aevum agricultural drink product.

@@ -1,0 +1,1441 @@
+crops:
+  emmer_wheat:
+    name: Emmer Wheat
+    category: grains
+    region: Mediterranean
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  einkorn_wheat:
+    name: Einkorn Wheat
+    category: grains
+    region: Mediterranean
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  durum_wheat:
+    name: Durum Wheat
+    category: grains
+    region: Mediterranean
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  barley:
+    name: Barley
+    category: grains
+    region: Mediterranean
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  rye:
+    name: Rye
+    category: grains
+    region: Europe
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  oats:
+    name: Oats
+    category: grains
+    region: Europe
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  spelt:
+    name: Spelt
+    category: grains
+    region: Europe
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  lentils:
+    name: Lentils
+    category: legumes
+    region: Mediterranean
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  chickpeas:
+    name: Chickpeas
+    category: legumes
+    region: Mediterranean
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  peas:
+    name: Peas
+    category: legumes
+    region: Mediterranean
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  fava_beans:
+    name: Fava Beans
+    category: legumes
+    region: Mediterranean
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  lupins:
+    name: Lupins
+    category: legumes
+    region: Mediterranean
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  cowpeas:
+    name: Cowpeas
+    category: legumes
+    region: Africa
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A africa crop cultivated for Aevum's farms, kitchens and markets.
+  sesame:
+    name: Sesame
+    category: oilseeds
+    region: Mediterranean
+    visual-style: flower
+    growth-seconds: 780
+    seed-price: 4.0
+    market-price: 5.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  flax:
+    name: Flax
+    category: fibres
+    region: Mediterranean
+    visual-style: flower
+    growth-seconds: 840
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  hemp:
+    name: Hemp
+    category: fibres
+    region: Eurasia
+    visual-style: leaf
+    growth-seconds: 840
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A eurasia crop cultivated for Aevum's farms, kitchens and markets.
+  grapes:
+    name: Grapes
+    category: vine_fruits
+    region: Mediterranean
+    visual-style: vine
+    growth-seconds: 660
+    seed-price: 4.8
+    market-price: 6.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  olives:
+    name: Olives
+    category: tree_fruits
+    region: Mediterranean
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  figs:
+    name: Figs
+    category: tree_fruits
+    region: Mediterranean
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  dates:
+    name: Dates
+    category: tree_fruits
+    region: North Africa
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A north africa crop cultivated for Aevum's farms, kitchens and markets.
+  pomegranates:
+    name: Pomegranates
+    category: tree_fruits
+    region: Mediterranean
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  apples:
+    name: Apples
+    category: tree_fruits
+    region: Eurasia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A eurasia crop cultivated for Aevum's farms, kitchens and markets.
+  pears:
+    name: Pears
+    category: tree_fruits
+    region: Eurasia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A eurasia crop cultivated for Aevum's farms, kitchens and markets.
+  quinces:
+    name: Quinces
+    category: tree_fruits
+    region: Mediterranean
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  apricots:
+    name: Apricots
+    category: tree_fruits
+    region: Central Asia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A central asia crop cultivated for Aevum's farms, kitchens and markets.
+  plums:
+    name: Plums
+    category: tree_fruits
+    region: Eurasia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A eurasia crop cultivated for Aevum's farms, kitchens and markets.
+  cherries:
+    name: Cherries
+    category: tree_fruits
+    region: Eurasia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A eurasia crop cultivated for Aevum's farms, kitchens and markets.
+  lemons:
+    name: Lemons
+    category: citrus
+    region: South Asia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.0
+    market-price: 6.25
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  oranges:
+    name: Oranges
+    category: citrus
+    region: East Asia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.0
+    market-price: 6.25
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A east asia crop cultivated for Aevum's farms, kitchens and markets.
+  almonds:
+    name: Almonds
+    category: nuts
+    region: Mediterranean
+    visual-style: tree
+    growth-seconds: 1020
+    seed-price: 6.5
+    market-price: 8.12
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  walnuts:
+    name: Walnuts
+    category: nuts
+    region: Eurasia
+    visual-style: tree
+    growth-seconds: 1020
+    seed-price: 6.5
+    market-price: 8.12
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A eurasia crop cultivated for Aevum's farms, kitchens and markets.
+  pistachios:
+    name: Pistachios
+    category: nuts
+    region: West Asia
+    visual-style: tree
+    growth-seconds: 1020
+    seed-price: 6.5
+    market-price: 8.12
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A west asia crop cultivated for Aevum's farms, kitchens and markets.
+  hazelnuts:
+    name: Hazelnuts
+    category: nuts
+    region: Europe
+    visual-style: tree
+    growth-seconds: 1020
+    seed-price: 6.5
+    market-price: 8.12
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  onions:
+    name: Onions
+    category: vegetables
+    region: Mediterranean
+    visual-style: bulb
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  garlic:
+    name: Garlic
+    category: vegetables
+    region: Central Asia
+    visual-style: bulb
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A central asia crop cultivated for Aevum's farms, kitchens and markets.
+  leeks:
+    name: Leeks
+    category: vegetables
+    region: Mediterranean
+    visual-style: leaf
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  cabbage:
+    name: Cabbage
+    category: vegetables
+    region: Europe
+    visual-style: leaf
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  lettuce:
+    name: Lettuce
+    category: vegetables
+    region: Mediterranean
+    visual-style: leaf
+    growth-seconds: 420
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  cucumber:
+    name: Cucumber
+    category: vegetables
+    region: South Asia
+    visual-style: vine
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  radish:
+    name: Radish
+    category: root_vegetables
+    region: Mediterranean
+    visual-style: root
+    growth-seconds: 420
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  turnips:
+    name: Turnips
+    category: root_vegetables
+    region: Europe
+    visual-style: root
+    growth-seconds: 660
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  beetroot:
+    name: Beetroot
+    category: root_vegetables
+    region: Mediterranean
+    visual-style: root
+    growth-seconds: 660
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  carrots:
+    name: Carrots
+    category: root_vegetables
+    region: Central Asia
+    visual-style: root
+    growth-seconds: 660
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A central asia crop cultivated for Aevum's farms, kitchens and markets.
+  celery:
+    name: Celery
+    category: vegetables
+    region: Mediterranean
+    visual-style: leaf
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  parsnips:
+    name: Parsnips
+    category: root_vegetables
+    region: Europe
+    visual-style: root
+    growth-seconds: 660
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  asparagus:
+    name: Asparagus
+    category: vegetables
+    region: Mediterranean
+    visual-style: stem
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  fennel:
+    name: Fennel
+    category: herbs
+    region: Mediterranean
+    visual-style: herb
+    growth-seconds: 480
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  coriander:
+    name: Coriander
+    category: herbs
+    region: Mediterranean
+    visual-style: herb
+    growth-seconds: 480
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  cumin:
+    name: Cumin
+    category: spices
+    region: West Asia
+    visual-style: herb
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A west asia crop cultivated for Aevum's farms, kitchens and markets.
+  dill:
+    name: Dill
+    category: herbs
+    region: Mediterranean
+    visual-style: herb
+    growth-seconds: 480
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  mint:
+    name: Mint
+    category: herbs
+    region: Eurasia
+    visual-style: herb
+    growth-seconds: 420
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A eurasia crop cultivated for Aevum's farms, kitchens and markets.
+  thyme:
+    name: Thyme
+    category: herbs
+    region: Mediterranean
+    visual-style: herb
+    growth-seconds: 480
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  rosemary:
+    name: Rosemary
+    category: herbs
+    region: Mediterranean
+    visual-style: herb
+    growth-seconds: 480
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  oregano:
+    name: Oregano
+    category: herbs
+    region: Mediterranean
+    visual-style: herb
+    growth-seconds: 480
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  sage:
+    name: Sage
+    category: herbs
+    region: Mediterranean
+    visual-style: herb
+    growth-seconds: 480
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  mustard:
+    name: Mustard
+    category: spices
+    region: Mediterranean
+    visual-style: flower
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  poppy:
+    name: Poppy
+    category: spices
+    region: Mediterranean
+    visual-style: flower
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  saffron:
+    name: Saffron
+    category: spices
+    region: West Asia
+    visual-style: flower
+    growth-seconds: 1320
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A west asia crop cultivated for Aevum's farms, kitchens and markets.
+  rice:
+    name: Rice
+    category: grains
+    region: East Asia
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A east asia crop cultivated for Aevum's farms, kitchens and markets.
+  soybeans:
+    name: Soybeans
+    category: legumes
+    region: East Asia
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A east asia crop cultivated for Aevum's farms, kitchens and markets.
+  mung_beans:
+    name: Mung Beans
+    category: legumes
+    region: South Asia
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  adzuki_beans:
+    name: Adzuki Beans
+    category: legumes
+    region: East Asia
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A east asia crop cultivated for Aevum's farms, kitchens and markets.
+  eggplant:
+    name: Eggplant
+    category: vegetables
+    region: South Asia
+    visual-style: fruit
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  ginger:
+    name: Ginger
+    category: spices
+    region: South Asia
+    visual-style: root
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  turmeric:
+    name: Turmeric
+    category: spices
+    region: South Asia
+    visual-style: root
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  sugarcane:
+    name: Sugarcane
+    category: sugar_crops
+    region: South Asia
+    visual-style: cane
+    growth-seconds: 720
+    seed-price: 4.2
+    market-price: 5.25
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  mangoes:
+    name: Mangoes
+    category: tree_fruits
+    region: South Asia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  bananas:
+    name: Bananas
+    category: tree_fruits
+    region: Southeast Asia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A southeast asia crop cultivated for Aevum's farms, kitchens and
+      markets.
+  taro:
+    name: Taro
+    category: root_vegetables
+    region: Southeast Asia
+    visual-style: leaf
+    growth-seconds: 660
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A southeast asia crop cultivated for Aevum's farms, kitchens and
+      markets.
+  coconuts:
+    name: Coconuts
+    category: tree_fruits
+    region: Southeast Asia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A southeast asia crop cultivated for Aevum's farms, kitchens and
+      markets.
+  black_pepper:
+    name: Black Pepper
+    category: spices
+    region: South Asia
+    visual-style: vine
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  cloves:
+    name: Cloves
+    category: spices
+    region: Southeast Asia
+    visual-style: tree
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A southeast asia crop cultivated for Aevum's farms, kitchens and
+      markets.
+  nutmeg:
+    name: Nutmeg
+    category: spices
+    region: Southeast Asia
+    visual-style: tree
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A southeast asia crop cultivated for Aevum's farms, kitchens and
+      markets.
+  cinnamon:
+    name: Cinnamon
+    category: spices
+    region: South Asia
+    visual-style: tree
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  sorghum:
+    name: Sorghum
+    category: grains
+    region: Africa
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A africa crop cultivated for Aevum's farms, kitchens and markets.
+  teff:
+    name: Teff
+    category: grains
+    region: Horn of Africa
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A horn of africa crop cultivated for Aevum's farms, kitchens and
+      markets.
+  pearl_millet:
+    name: Pearl Millet
+    category: grains
+    region: Africa
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A africa crop cultivated for Aevum's farms, kitchens and markets.
+  african_rice:
+    name: African Rice
+    category: grains
+    region: West Africa
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A west africa crop cultivated for Aevum's farms, kitchens and markets.
+  okra:
+    name: Okra
+    category: vegetables
+    region: Africa
+    visual-style: pod
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A africa crop cultivated for Aevum's farms, kitchens and markets.
+  watermelon:
+    name: Watermelon
+    category: vine_fruits
+    region: Africa
+    visual-style: vine
+    growth-seconds: 660
+    seed-price: 4.8
+    market-price: 6.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A africa crop cultivated for Aevum's farms, kitchens and markets.
+  coffee:
+    name: Coffee
+    category: tree_fruits
+    region: East Africa
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A east africa crop cultivated for Aevum's farms, kitchens and markets.
+  kola_nuts:
+    name: Kola Nuts
+    category: nuts
+    region: West Africa
+    visual-style: tree
+    growth-seconds: 1020
+    seed-price: 6.5
+    market-price: 8.12
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A west africa crop cultivated for Aevum's farms, kitchens and markets.
+  maize:
+    name: Maize
+    category: grains
+    region: Mesoamerica
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A mesoamerica crop cultivated for Aevum's farms, kitchens and markets.
+  potatoes:
+    name: Potatoes
+    category: root_vegetables
+    region: Andes
+    visual-style: root
+    growth-seconds: 660
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A andes crop cultivated for Aevum's farms, kitchens and markets.
+  sweet_potatoes:
+    name: Sweet Potatoes
+    category: root_vegetables
+    region: Central America
+    visual-style: root
+    growth-seconds: 660
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A central america crop cultivated for Aevum's farms, kitchens and
+      markets.
+  quinoa:
+    name: Quinoa
+    category: grains
+    region: Andes
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A andes crop cultivated for Aevum's farms, kitchens and markets.
+  amaranth:
+    name: Amaranth
+    category: grains
+    region: Mesoamerica
+    visual-style: grain
+    growth-seconds: 660
+    seed-price: 2.5
+    market-price: 3.12
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A mesoamerica crop cultivated for Aevum's farms, kitchens and markets.
+  cassava:
+    name: Cassava
+    category: root_vegetables
+    region: South America
+    visual-style: root
+    growth-seconds: 660
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A south america crop cultivated for Aevum's farms, kitchens and markets.
+  peanuts:
+    name: Peanuts
+    category: legumes
+    region: South America
+    visual-style: pod
+    growth-seconds: 600
+    seed-price: 3.0
+    market-price: 3.75
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A south america crop cultivated for Aevum's farms, kitchens and markets.
+  cacao:
+    name: Cacao
+    category: tree_fruits
+    region: Mesoamerica
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A mesoamerica crop cultivated for Aevum's farms, kitchens and markets.
+  squash:
+    name: Squash
+    category: vine_fruits
+    region: Americas
+    visual-style: vine
+    growth-seconds: 660
+    seed-price: 4.8
+    market-price: 6.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A americas crop cultivated for Aevum's farms, kitchens and markets.
+  pumpkins:
+    name: Pumpkins
+    category: vine_fruits
+    region: Americas
+    visual-style: vine
+    growth-seconds: 660
+    seed-price: 4.8
+    market-price: 6.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A americas crop cultivated for Aevum's farms, kitchens and markets.
+  chillies:
+    name: Chillies
+    category: spices
+    region: Americas
+    visual-style: fruit
+    growth-seconds: 780
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A americas crop cultivated for Aevum's farms, kitchens and markets.
+  tomatoes:
+    name: Tomatoes
+    category: vegetables
+    region: Andes
+    visual-style: vine
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A andes crop cultivated for Aevum's farms, kitchens and markets.
+  tomatillos:
+    name: Tomatillos
+    category: vegetables
+    region: Mesoamerica
+    visual-style: vine
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mesoamerica crop cultivated for Aevum's farms, kitchens and markets.
+  avocados:
+    name: Avocados
+    category: tree_fruits
+    region: Mesoamerica
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A mesoamerica crop cultivated for Aevum's farms, kitchens and markets.
+  papayas:
+    name: Papayas
+    category: tree_fruits
+    region: Central America
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A central america crop cultivated for Aevum's farms, kitchens and
+      markets.
+  pineapples:
+    name: Pineapples
+    category: tree_fruits
+    region: South America
+    visual-style: leaf
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A south america crop cultivated for Aevum's farms, kitchens and markets.
+  vanilla:
+    name: Vanilla
+    category: spices
+    region: Mesoamerica
+    visual-style: vine
+    growth-seconds: 1320
+    seed-price: 18.0
+    market-price: 9.38
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A mesoamerica crop cultivated for Aevum's farms, kitchens and markets.
+  sunflowers:
+    name: Sunflowers
+    category: oilseeds
+    region: North America
+    visual-style: flower
+    growth-seconds: 780
+    seed-price: 4.0
+    market-price: 5.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A north america crop cultivated for Aevum's farms, kitchens and markets.
+  strawberries:
+    name: Strawberries
+    category: berries
+    region: Europe
+    visual-style: fruit
+    growth-seconds: 420
+    seed-price: 6.0
+    market-price: 7.5
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  blueberries:
+    name: Blueberries
+    category: berries
+    region: North America
+    visual-style: fruit
+    growth-seconds: 600
+    seed-price: 6.0
+    market-price: 7.5
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A north america crop cultivated for Aevum's farms, kitchens and markets.
+  raspberries:
+    name: Raspberries
+    category: berries
+    region: Eurasia
+    visual-style: fruit
+    growth-seconds: 600
+    seed-price: 6.0
+    market-price: 7.5
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A eurasia crop cultivated for Aevum's farms, kitchens and markets.
+  kiwi:
+    name: Kiwifruit
+    category: tree_fruits
+    region: East Asia
+    visual-style: vine
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A east asia crop cultivated for Aevum's farms, kitchens and markets.
+  dragonfruit:
+    name: Dragon Fruit
+    category: tree_fruits
+    region: Central America
+    visual-style: vine
+    growth-seconds: 1320
+    seed-price: 13.2
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A central america crop cultivated for Aevum's farms, kitchens and
+      markets.
+  passionfruit:
+    name: Passionfruit
+    category: tree_fruits
+    region: South America
+    visual-style: vine
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A south america crop cultivated for Aevum's farms, kitchens and markets.
+  jackfruit:
+    name: Jackfruit
+    category: tree_fruits
+    region: South Asia
+    visual-style: tree
+    growth-seconds: 900
+    seed-price: 5.5
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A south asia crop cultivated for Aevum's farms, kitchens and markets.
+  durian:
+    name: Durian
+    category: tree_fruits
+    region: Southeast Asia
+    visual-style: tree
+    growth-seconds: 1320
+    seed-price: 13.2
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A southeast asia crop cultivated for Aevum's farms, kitchens and
+      markets.
+  mangosteen:
+    name: Mangosteen
+    category: tree_fruits
+    region: Southeast Asia
+    visual-style: tree
+    growth-seconds: 1320
+    seed-price: 13.2
+    market-price: 6.88
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.12
+    description: A southeast asia crop cultivated for Aevum's farms, kitchens and
+      markets.
+  broccoli:
+    name: Broccoli
+    category: vegetables
+    region: Mediterranean
+    visual-style: leaf
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  cauliflower:
+    name: Cauliflower
+    category: vegetables
+    region: Mediterranean
+    visual-style: leaf
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A mediterranean crop cultivated for Aevum's farms, kitchens and markets.
+  bell_peppers:
+    name: Bell Peppers
+    category: vegetables
+    region: Central America
+    visual-style: fruit
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A central america crop cultivated for Aevum's farms, kitchens and
+      markets.
+  brussels_sprouts:
+    name: Brussels Sprouts
+    category: vegetables
+    region: Europe
+    visual-style: leaf
+    growth-seconds: 540
+    seed-price: 2.8
+    market-price: 3.5
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  rapeseed:
+    name: Rapeseed
+    category: oilseeds
+    region: Europe
+    visual-style: flower
+    growth-seconds: 780
+    seed-price: 4.0
+    market-price: 5.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  sugar_beet:
+    name: Sugar Beet
+    category: sugar_crops
+    region: Europe
+    visual-style: root
+    growth-seconds: 720
+    seed-price: 4.2
+    market-price: 5.25
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  tea:
+    name: Tea Leaves
+    category: herbs
+    region: East Asia
+    visual-style: leaf
+    growth-seconds: 480
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A east asia crop cultivated for Aevum's farms, kitchens and markets.
+  chamomile:
+    name: Chamomile
+    category: herbs
+    region: Europe
+    visual-style: flower
+    growth-seconds: 420
+    seed-price: 3.2
+    market-price: 4.0
+    yield-min: 1
+    yield-max: 3
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  blackberries:
+    name: Blackberries
+    category: berries
+    region: Europe
+    visual-style: fruit
+    growth-seconds: 600
+    seed-price: 6.0
+    market-price: 7.5
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A europe crop cultivated for Aevum's farms, kitchens and markets.
+  cranberries:
+    name: Cranberries
+    category: berries
+    region: North America
+    visual-style: fruit
+    growth-seconds: 600
+    seed-price: 6.0
+    market-price: 7.5
+    yield-min: 1
+    yield-max: 4
+    seed-return-chance: 0.28
+    description: A north america crop cultivated for Aevum's farms, kitchens and markets.

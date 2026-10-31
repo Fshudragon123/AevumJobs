@@ -1,0 +1,10 @@
+target/
+*.db
+*.db-shm
+*.db-wal
+.idea/
+.vscode/
+__pycache__/
+resource-pack/
+AevumAgriculture-ResourcePack.zip
+src/main/resources/aevum-agriculture-pack.zip
