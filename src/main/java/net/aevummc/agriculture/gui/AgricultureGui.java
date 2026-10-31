@@ -298,6 +298,20 @@ public final class AgricultureGui implements Listener {
 
     @EventHandler public void onDrag(InventoryDragEvent event){if(event.getView().getTopInventory().getHolder(false) instanceof Holder)event.setCancelled(true);}
 
+    private String stationName(String id) {
+        return switch (id == null ? "" : id.toLowerCase(Locale.ROOT)) {
+            case "mill" -> "STONE MILL";
+            case "press" -> "OLIVE PRESS";
+            case "oven" -> "BAKER'S OVEN";
+            case "kitchen" -> "COOKING HEARTH";
+            case "drying_rack" -> "DRYING RACK";
+            case "fermenter" -> "FERMENTATION STAND";
+            case "preparation" -> "PREPARATION TABLE";
+            case "mortar" -> "MORTAR & PESTLE";
+            default -> id == null ? "PRODUCTION STATION" : id.replace('_', ' ').toUpperCase(Locale.ROOT);
+        };
+    }
+
     private void buyStation(Player player,String id){
         if(!player.hasPermission("aevumagriculture.business")){player.sendMessage(plugin.message("You do not have permission to purchase production equipment."));return;}
         if(plugin.economy()==null){player.sendMessage(plugin.message("Purchasing station kits requires Vault and an economy provider."));return;}
